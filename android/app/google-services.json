@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "430957845744",
+    "project_id": "pharma-go-v1",
+    "storage_bucket": "pharma-go-v1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:430957845744:android:eec9196ff4b685746d3635",
+        "android_client_info": {
+          "package_name": "com.kodisinghesofttech.pharma_go_v2_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "430957845744-6ir9qsaqpm6shbuncou0rjk7vmou3db0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMtTE09RWlin0TSmCYnWbAq2Rf229o6iY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "430957845744-6ir9qsaqpm6shbuncou0rjk7vmou3db0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
