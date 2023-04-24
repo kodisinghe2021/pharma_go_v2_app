@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pharma_go_v2_app/controllers/home/home_controller.dart';
+import 'package:pharma_go_v2_app/presentation/widgets/alert_boxes/get_alert.dart';
 
 class HomePage extends GetView<HomeController> {
   const HomePage({super.key});
@@ -17,6 +18,15 @@ class HomePage extends GetView<HomeController> {
       appBar: AppBar(
         title: const Text("image Reading"),
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              waitingDialogBox();
+              controller.logout();
+            },
+            icon: const Icon(Icons.logout),
+          ),
+        ],
       ),
 
       //^ body
@@ -26,12 +36,14 @@ class HomePage extends GetView<HomeController> {
           width: screenSize.width,
           height: screenSize.height,
           child: Obx(
-            () =>  Column(
+            () => Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                if (controller.textScanning.value) const CircularProgressIndicator(),
-                if (!controller.textScanning.value && controller.imageFile == null)
+                if (controller.textScanning.value)
+                  const CircularProgressIndicator(),
+                if (!controller.textScanning.value &&
+                    controller.imageFile == null)
                   Container(
                     width: screenSize.width * .9,
                     height: screenSize.width * 1.35,

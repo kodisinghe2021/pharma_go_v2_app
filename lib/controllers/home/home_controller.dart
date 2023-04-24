@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pharma_go_v2_app/routes/navigator/navigator.dart';
 
 class HomeController extends GetxController {
   var textScanning = false.obs;
@@ -9,13 +12,17 @@ class HomeController extends GetxController {
 
   var scannedText = ''.obs;
 
+  FirebaseAuth _auth = FirebaseAuth.instance;
+
+  GetStorage _storage = GetStorage();
+
   Future<void> getImage(ImageSource imageSource) async {
     try {
       final pickedImage = await ImagePicker().pickImage(source: imageSource);
       if (pickedImage != null) {
         textScanning.value = true;
         imageFile = pickedImage;
-      //  getRecognisedText(pickedImage);
+        //  getRecognisedText(pickedImage);
       }
     } catch (e) {
       textScanning.value = false;
@@ -24,7 +31,7 @@ class HomeController extends GetxController {
     }
   }
 
- Future <void> getRecognisedText(XFile? imageFile) async {
+  Future<void> getRecognisedText(XFile? imageFile) async {
     try {
       //^ get image from the file using file path
       final inputImage = InputImage.fromFilePath(imageFile!.path);
@@ -51,5 +58,11 @@ class HomeController extends GetxController {
       scannedText.value = "Not Readable";
       textScanning.value = false;
     }
+  }
+
+  Future<void> logout() async {
+    await _auth.signOut();
+    await _storage.erase();
+    navigatorLogging();
   }
 }
