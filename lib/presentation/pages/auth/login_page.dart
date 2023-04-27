@@ -2,14 +2,17 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:icons_plus/icons_plus.dart';
 import 'package:logger/logger.dart';
 import 'package:pharma_go_v2_app/constant/colurs.dart';
 import 'package:pharma_go_v2_app/controllers/auth/login_controller.dart';
 import 'package:pharma_go_v2_app/presentation/widgets/alert_boxes/get_alert.dart';
 import 'package:pharma_go_v2_app/presentation/widgets/components/cus_main_button.dart';
+import 'package:pharma_go_v2_app/presentation/widgets/components/goole_button.dart';
 import 'package:pharma_go_v2_app/presentation/widgets/components/text_field.dart';
-import 'package:pharma_go_v2_app/presentation/widgets/decorations/glass_morphism.dart';
+import 'package:pharma_go_v2_app/presentation/widgets/components/text_icon_button.dart';
 import 'package:pharma_go_v2_app/presentation/widgets/screen/custom_heading.dart';
+import 'package:pharma_go_v2_app/routes/app_pages.dart';
 
 class LoginPage extends GetView<LoginController> {
   const LoginPage({super.key});
@@ -17,132 +20,152 @@ class LoginPage extends GetView<LoginController> {
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
+
     return SafeArea(
       child: Scaffold(
-        body: Center(
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Container(
-              width: screenSize.width,
-              height: screenSize.height,
-              padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 10),
+        body: Stack(
+          children: [
+            //^ background Container
+            Container(
+              width: double.infinity,
+              height: double.infinity,
               decoration: BoxDecoration(
                 gradient: backGroundGradient(),
               ),
-              child: Column(
-                children: [
-                  //* heading
-                  const Expanded(
-                    flex: 1,
-                    child: CustomHeding(
-                      title: "Hello Again!",
-                      text: "Welcome back you've\n been missed!",
-                    ),
-                  ),
-                  //* glass
-                  Expanded(
-                    flex: 2,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-                        child: Container(
-                          decoration: glassDecoration(),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
+            ),
+            //^ second layer
+            SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                child: Obx(
+                  () => Column(
+                    children: [
+                      //^ header
+                      SizedBox(
+                        height: screenSize.height * .4,
+                        width: screenSize.width,
+                        // color: Colors.greenAccent,
+                        child: const CustomHeding(
+                          title: "Hello Again!",
+                          text: "Welcome back you've\n been missed!",
+                        ),
+                      ),
+
+                      //^ social Login
+                      SizedBox(
+                        height: screenSize.height * .1,
+                        // color: Colors.blueAccent,
+                        child: GoogleLoginButton(
+                          onTap: () {},
+                        ),
+                      ),
+                      //^ Form
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+                          child: Container(
+                            height: screenSize.height * .4,
+                            decoration: BoxDecoration(
+                              gradient: glassGrasdient(),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 5),
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                Expanded(
-                                  child: Container(
-                                    child: Column(
-                                      children: [
-                                        Expanded(
-                                          child: CustomTextField(
-                                            controller: controller.email,
-                                            labelText: 'Email here',
-                                            suffix: const Icon(
-                                              Icons.email_outlined,
-                                              color: Color(0xFF203A43),
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Obx(
-                                            () => CustomTextField(
-                                              controller: controller.password,
-                                              isObsecure:
-                                                  controller.isObsecure.value,
-                                              labelText: 'Passward here',
-                                              suffix: IconButton(
-                                                onPressed: () {
-                                                  controller.isObsecure.value =
-                                                      !controller
-                                                          .isObsecure.value;
-                                                },
-                                                icon: Icon(
-                                                  controller.isObsecure.value
-                                                      ? Icons.visibility_off
-                                                      : Icons.visibility,
-                                                  color:
-                                                      const Color(0xFF203A43),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                                SizedBox(
+                                  height: screenSize.height * .1,
+                                  //    color: Colors.redAccent,
+                                  child: CustomTextField(
+                                    controller: controller.email,
+                                    labelText: 'Email here',
+                                    suffix: IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(Bootstrap.mailbox2),
                                     ),
                                   ),
                                 ),
-                                Expanded(
-                                  child: Container(
-                                    // color: Colors.redAccent,
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 50,
-                                      horizontal: 20,
-                                    ),
-                                    child: SizedBox(
-                                      height: 50,
-                                      width: screenSize.width * .7,
-                                      child: controller.isLoading.value
-                                          ? const Center(
-                                              child:
-                                                  CircularProgressIndicator())
-                                          : CutomMainButton(
-                                              onTap: () async {
-                                                waitingDialogBox();
-                                                await controller.login();
-                                                if (controller
-                                                    .isSuccessed.value) {
-                                                  Logger().i(
-                                                      'uID - ${controller.getStorage.read('uID')} | email - ${controller.getStorage.read('email')}');
-                                                } else {
-                                                  Logger().e(
-                                                      'Error - ${controller.getStorage.read('error')}');
-                                                }
-                                              },
-                                            ),
+                                SizedBox(
+                                  height: screenSize.height * .1,
+                                  //  color: Colors.redAccent,
+                                  child: CustomTextField(
+                                    isObsecure: controller.isObsecure.value,
+                                    controller: controller.password,
+                                    labelText: 'Password here',
+                                    suffix: IconButton(
+                                      onPressed: () {
+                                        controller.isObsecure.value =
+                                            !controller.isObsecure.value;
+                                        Logger().i(controller.isObsecure.value);
+                                      },
+                                      icon: controller.isObsecure.value
+                                          ? const Icon(Bootstrap.eye_slash_fill)
+                                          : const Icon(Bootstrap.eye_fill),
                                     ),
                                   ),
+                                ),
+                                //* Login Button
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 5,
+                                  ),
+                                  height: screenSize.height * .1,
+                                  //   color: Colors.redAccent,
+                                  child: controller.isLoading.value
+                                      ? const Center(
+                                          child: CircularProgressIndicator())
+                                      : CutomMainButton(
+                                          text: "Sign In",
+                                          onTap: () async {
+                                            waitingDialogBox();
+                                            await controller.login();
+                                            if (controller.isSuccessed.value) {
+                                              Logger().i(
+                                                  'uID - ${controller.getStorage.read('uID')} | email - ${controller.getStorage.read('email')}');
+                                            } else {
+                                              Logger().e(
+                                                  'Error - ${controller.getStorage.read('error')}');
+                                            }
+                                          },
+                                        ),
                                 ),
                               ],
                             ),
                           ),
                         ),
                       ),
-                    ),
+                      //^ bottom free area
+                      // Container(
+                      //   height: screenSize.height * .05,
+                      //   color: Colors.redAccent,
+                      //   child: const Center(child: Text("bottom space")),
+                      // ),
+                    ],
                   ),
-                  //* bottom
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                        // color: Colors.amber,
-                        ),
-                  ),
-                ],
+                ),
               ),
             ),
-          ),
+            //^ Move to registration button
+            Positioned(
+              top: screenSize.height * .32,
+              child: TextIconButton(
+                icon: const Icon(
+                  HeroIcons.arrow_right,
+                  size: 40,
+                  color: Colors.white,
+                ),
+                text: "Haven't account? Register here",
+                onTap: () {
+                  Logger().d("Tapped");
+                  Get.toNamed(Routes.REGISTRATION);
+                },
+              ),
+            )
+          ],
         ),
       ),
     );

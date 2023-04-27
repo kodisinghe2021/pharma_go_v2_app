@@ -12,10 +12,11 @@ class CustomHeding extends StatelessWidget {
   final String text;
   @override
   Widget build(BuildContext context) {
+    Size screenSize = MediaQuery.of(context).size;
     return Column(
       children: [
+        const Spacer(),
         Expanded(
-          flex: 1,
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 70),
             child: FittedBox(
@@ -29,7 +30,6 @@ class CustomHeding extends StatelessWidget {
           ),
         ),
         Expanded(
-          flex: 1,
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 60),
             child: FittedBox(
@@ -43,6 +43,7 @@ class CustomHeding extends StatelessWidget {
             ),
           ),
         ),
+        const Spacer(),
       ],
     );
   }

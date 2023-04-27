@@ -50,3 +50,28 @@ LinearGradient buttonGradientClick() => const LinearGradient(
         Color(0xFF0F2027),
       ],
     );
+LinearGradient whiteGradiaent() => const LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [
+        Color(0xFF7C5FAF),
+        Color(0xFF54386C),
+      ],
+    );
+LinearGradient vergineAmerica() => const LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [
+        Color(0xFF7b4397),
+        Color(0xFFdc2430),
+      ],
+    );
+LinearGradient atlas() => const LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [
+        Color(0xFFFEAC5E),
+        Color(0xFFC779D0),
+        Color(0xFF4BC0C8),
+      ],
+    );

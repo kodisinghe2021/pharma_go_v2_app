@@ -5,14 +5,16 @@ import 'package:pharma_go_v2_app/constant/colurs.dart';
 import 'package:pharma_go_v2_app/controllers/anim/button_anim.dart';
 
 class CutomMainButton extends StatelessWidget {
-   CutomMainButton({
+  CutomMainButton({
     required this.onTap,
+    required this.text,
     this.isLoading = false,
     super.key,
   });
- final ButtonAnimController _animController = ButtonAnimController();
+  final ButtonAnimController _animController = ButtonAnimController();
   final Function() onTap;
   final bool isLoading;
+  final String text;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -42,7 +44,7 @@ class CutomMainButton extends StatelessWidget {
                     color: kLowWhite,
                   )
                 : Text(
-                    'Sign In',
+                   text,
                     style: GoogleFonts.ubuntu(
                       fontSize: 30,
                       color: kLowWhite,

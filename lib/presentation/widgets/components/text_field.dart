@@ -16,7 +16,7 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
+    return TextField(
       controller: controller,
       obscureText: isObsecure,
       style: GoogleFonts.kanit(fontSize: 20),
@@ -25,7 +25,7 @@ class CustomTextField extends StatelessWidget {
         suffix: suffix,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 30,
-          vertical: 20,
+          vertical: 10,
         ),
         filled: true,
         fillColor: Colors.white,
