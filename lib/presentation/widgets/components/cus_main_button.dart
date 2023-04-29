@@ -8,6 +8,7 @@ class CutomMainButton extends StatelessWidget {
   CutomMainButton({
     required this.onTap,
     required this.text,
+
     this.isLoading = false,
     super.key,
   });
@@ -15,13 +16,13 @@ class CutomMainButton extends StatelessWidget {
   final Function() onTap;
   final bool isLoading;
   final String text;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Obx(
-        () => AnimatedContainer(
-          duration: const Duration(milliseconds: 1000),
+        () => Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(100),
             gradient: buttonGradient(),
@@ -44,7 +45,7 @@ class CutomMainButton extends StatelessWidget {
                     color: kLowWhite,
                   )
                 : Text(
-                   text,
+                    text,
                     style: GoogleFonts.ubuntu(
                       fontSize: 30,
                       color: kLowWhite,

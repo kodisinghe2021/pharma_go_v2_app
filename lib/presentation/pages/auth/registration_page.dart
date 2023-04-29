@@ -1,5 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_onboarding_slider/flutter_onboarding_slider.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
@@ -8,7 +8,6 @@ import 'package:logger/logger.dart';
 import 'package:pharma_go_v2_app/constant/box_shadows.dart';
 import 'package:pharma_go_v2_app/constant/colurs.dart';
 import 'package:pharma_go_v2_app/controllers/auth/registration_controller.dart';
-import 'package:pharma_go_v2_app/presentation/widgets/alert_boxes/get_alert.dart';
 import 'package:pharma_go_v2_app/presentation/widgets/components/cus_main_button.dart';
 import 'package:pharma_go_v2_app/presentation/widgets/components/text_field.dart';
 import 'package:pharma_go_v2_app/presentation/widgets/components/text_icon_button.dart';
@@ -20,6 +19,8 @@ class RegistrationPage extends GetView<RegistrationController> {
   final Location _location = Location.instance;
   @override
   Widget build(BuildContext context) {
+    CollectionReference users =
+        FirebaseFirestore.instance.collection('users-new');
     final Size screenSize = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
@@ -58,7 +59,7 @@ class RegistrationPage extends GetView<RegistrationController> {
                               labelText: 'Your name here',
                               suffix: IconButton(
                                 onPressed: () {},
-                                icon: const Icon(Bootstrap.mailbox2),
+                                icon: const Icon(Bootstrap.person),
                               ),
                             ),
                           ),
@@ -71,7 +72,7 @@ class RegistrationPage extends GetView<RegistrationController> {
                               labelText: 'Phone number here',
                               suffix: IconButton(
                                 onPressed: () {},
-                                icon: const Icon(Bootstrap.mailbox2),
+                                icon: const Icon(Bootstrap.phone),
                               ),
                             ),
                           ),
@@ -89,8 +90,8 @@ class RegistrationPage extends GetView<RegistrationController> {
                                               true;
                                           Logger().i("CLicked");
                                           //   await controller.getLocation();
-                                          await controller.getLocationdetails();
-                                          await controller.getAddress();
+                                          await controller.getLocation();
+                                          //await controller.getAddress();
                                           //await controller.geoLocationAll();
                                           Logger()
                                               .i("location function executed");
@@ -99,6 +100,8 @@ class RegistrationPage extends GetView<RegistrationController> {
                                           Logger().i(controller.latitude.value);
                                           controller.isLocationLoading.value =
                                               false;
+                                          controller.locationSetted.value =
+                                              true;
                                         },
                                         child: Container(
                                           padding: const EdgeInsets.symmetric(
@@ -119,7 +122,9 @@ class RegistrationPage extends GetView<RegistrationController> {
                                                 MainAxisAlignment.spaceEvenly,
                                             children: [
                                               Text(
-                                                "Set my current location",
+                                                controller.locationSetted.value
+                                                    ? "${controller.longitude.value.toStringAsFixed(5)} / ${controller.latitude.value.toStringAsFixed(5)}"
+                                                    : "Set my current location",
                                                 style:
                                                     GoogleFonts.anekDevanagari(
                                                   color: Colors.white,
@@ -137,54 +142,20 @@ class RegistrationPage extends GetView<RegistrationController> {
                                           ),
                                         ),
                                       ),
+                                      const SizedBox(width: 10),
                                     ],
                                   ),
                           ),
                           const SizedBox(height: 10),
                           SizedBox(
                             height: screenSize.height * .1,
-                            child: SingleChildScrollView(
-                              physics: const BouncingScrollPhysics(),
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    width: screenSize.width * .5,
-                                    //    color: Colors.redAccent,
-                                    child: CustomTextField(
-                                      controller: controller.adNumber,
-                                      labelText: 'Post number',
-                                      suffix: IconButton(
-                                        onPressed: () {},
-                                        icon: const Icon(Bootstrap.mailbox2),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: screenSize.width * .9,
-                                    //    color: Colors.redAccent,
-                                    child: CustomTextField(
-                                      controller: controller.adStreet,
-                                      labelText: 'Street here',
-                                      suffix: IconButton(
-                                        onPressed: () {},
-                                        icon: const Icon(Bootstrap.mailbox2),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: screenSize.width * .9,
-                                    //    color: Colors.redAccent,
-                                    child: CustomTextField(
-                                      controller: controller.adCity,
-                                      labelText: 'City here',
-                                      suffix: IconButton(
-                                        onPressed: () {},
-                                        icon: const Icon(Bootstrap.mailbox2),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                            //    color: Colors.redAccent,
+                            child: CustomTextField(
+                              controller: controller.nic,
+                              labelText: 'NIC here',
+                              suffix: IconButton(
+                                onPressed: () {},
+                                icon: const Icon(Bootstrap.indent),
                               ),
                             ),
                           ),
@@ -206,11 +177,17 @@ class RegistrationPage extends GetView<RegistrationController> {
                             height: screenSize.height * .1,
                             //    color: Colors.redAccent,
                             child: CustomTextField(
+                              isObsecure: controller.isObsecure.value,
                               controller: controller.password,
                               labelText: 'Passward here',
                               suffix: IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Bootstrap.mailbox2),
+                                onPressed: () {
+                                  controller.isObsecure.value =
+                                      !controller.isObsecure.value;
+                                },
+                                icon: controller.isObsecure.value
+                                    ? const Icon(Bootstrap.eye_slash_fill)
+                                    : const Icon(Bootstrap.eye_fill),
                               ),
                             ),
                           ),
@@ -228,15 +205,10 @@ class RegistrationPage extends GetView<RegistrationController> {
                                 : CutomMainButton(
                                     text: "Register",
                                     onTap: () async {
-                                      waitingDialogBox();
-                                      await controller.login();
-                                      if (controller.isSuccessed.value) {
-                                        Logger().i(
-                                            'uID - ${controller.getStorage.read('uID')} | email - ${controller.getStorage.read('email')}');
-                                      } else {
-                                        Logger().e(
-                                            'Error - ${controller.getStorage.read('error')}');
-                                      }
+                                      Logger().i("wait............");
+                                      controller.isLoading.value = true;
+                                      controller.addUser();
+                                      controller.isLoading.value = false;
                                     },
                                   ),
                           ),
@@ -284,60 +256,60 @@ class RegistrationPage extends GetView<RegistrationController> {
   }
 }
 
-OnBoardingSlider slider(Size screenSize, TextEditingController controller) =>
-    OnBoardingSlider(
-      headerBackgroundColor: Colors.amber,
-      finishButtonText: 'Register',
-      finishButtonStyle: const FinishButtonStyle(
-        backgroundColor: Colors.black,
-      ),
-      skipTextButton: const Text('Skip'),
-      trailing: const Text('Login'),
-      background: [
-        SizedBox(
-          height: screenSize.height * .1,
-          //    color: Colors.redAccent,
-          child: CustomTextField(
-            controller: controller,
-            labelText: 'Passward here',
-            suffix: IconButton(
-              onPressed: () {},
-              icon: const Icon(Bootstrap.mailbox2),
-            ),
-          ),
-        ),
-        Container(
-          color: Colors.white12,
-          width: 100,
-          height: 100,
-        ),
-      ],
-      totalPage: 2,
-      speed: 1.8,
-      pageBodies: [
-        SizedBox(
-          height: screenSize.height * .1,
-          //    color: Colors.redAccent,
-          child: CustomTextField(
-            controller: controller,
-            labelText: 'Passward here',
-            suffix: IconButton(
-              onPressed: () {},
-              icon: const Icon(Bootstrap.mailbox2),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: screenSize.height * .1,
-          //    color: Colors.redAccent,
-          child: CustomTextField(
-            controller: controller,
-            labelText: 'Passward here',
-            suffix: IconButton(
-              onPressed: () {},
-              icon: const Icon(Bootstrap.mailbox2),
-            ),
-          ),
-        ),
-      ],
-    );
+// OnBoardingSlider slider(Size screenSize, TextEditingController controller) =>
+//     OnBoardingSlider(
+//       headerBackgroundColor: Colors.amber,
+//       finishButtonText: 'Register',
+//       finishButtonStyle: const FinishButtonStyle(
+//         backgroundColor: Colors.black,
+//       ),
+//       skipTextButton: const Text('Skip'),
+//       trailing: const Text('Login'),
+//       background: [
+//         SizedBox(
+//           height: screenSize.height * .1,
+//           //    color: Colors.redAccent,
+//           child: CustomTextField(
+//             controller: controller,
+//             labelText: 'Passward here',
+//             suffix: IconButton(
+//               onPressed: () {},
+//               icon: const Icon(Bootstrap.mailbox2),
+//             ),
+//           ),
+//         ),
+//         Container(
+//           color: Colors.white12,
+//           width: 100,
+//           height: 100,
+//         ),
+//       ],
+//       totalPage: 2,
+//       speed: 1.8,
+//       pageBodies: [
+//         SizedBox(
+//           height: screenSize.height * .1,
+//           //    color: Colors.redAccent,
+//           child: CustomTextField(
+//             controller: controller,
+//             labelText: 'Passward here',
+//             suffix: IconButton(
+//               onPressed: () {},
+//               icon: const Icon(Bootstrap.mailbox2),
+//             ),
+//           ),
+//         ),
+//         SizedBox(
+//           height: screenSize.height * .1,
+//           //    color: Colors.redAccent,
+//           child: CustomTextField(
+//             controller: controller,
+//             labelText: 'Passward here',
+//             suffix: IconButton(
+//               onPressed: () {},
+//               icon: const Icon(Bootstrap.mailbox2),
+//             ),
+//           ),
+//         ),
+//       ],
+//     );
