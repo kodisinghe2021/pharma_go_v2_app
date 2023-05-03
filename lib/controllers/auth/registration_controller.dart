@@ -8,6 +8,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:location/location.dart';
 import 'package:logger/logger.dart';
 import 'package:pharma_go_v2_app/presentation/widgets/alert_boxes/get_alert.dart';
+import 'package:pharma_go_v2_app/routes/app_pages.dart';
 import 'package:pharma_go_v2_app/routes/navigator/navigator.dart';
 
 class RegistrationController extends GetxController {
@@ -120,6 +121,7 @@ class RegistrationController extends GetxController {
       Logger().i("user created successfully");
       return true;
     } on FirebaseAuthException catch (e) {
+      showDialogBox("Error", e.code);
       Logger().e(e.code);
       return false;
     }
@@ -134,6 +136,7 @@ class RegistrationController extends GetxController {
         nic.text.isNotEmpty &&
         email.text.isNotEmpty &&
         password.text.isNotEmpty) {
+
       isSigninSuccess = await createUser();
 
       if (isSigninSuccess) {
@@ -151,10 +154,17 @@ class RegistrationController extends GetxController {
             'password': password.text,
           });
           Logger().i("user added successfully");
+        
+          Get.offAllNamed(Routes.LOGIN);
+
         } on FirebaseException catch (e) {
+          showDialogBox("Somthing wrong", e.code);
           Logger().e(e.code);
         }
       }
+
+    } else {
+      showDialogBox("Empty fields", 'Fields cannot be empty.');
     }
   }
 }

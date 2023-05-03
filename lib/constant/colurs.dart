@@ -75,3 +75,7 @@ LinearGradient atlas() => const LinearGradient(
         Color(0xFF4BC0C8),
       ],
     );
+LinearGradient vimo() => const LinearGradient(
+      colors: [Color(0xFF6441A5), Color(0xff2a0845)],
+      stops: [0.5, 1.0],
+    );

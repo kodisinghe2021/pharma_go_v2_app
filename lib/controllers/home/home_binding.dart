@@ -7,13 +7,3 @@ class HomeBinding extends Bindings {
     Get.put<HomeController>(HomeController());
   }
 }
-
-
-// class HomeBinding extends Bindings {
-//   @override
-//   void dependencies() {
-//     Get.put<HomeController>(
-//       HomeController(),
-//     );
-//   }
-// }

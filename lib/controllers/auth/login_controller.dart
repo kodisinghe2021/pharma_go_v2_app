@@ -33,6 +33,7 @@ class LoginController extends GetxController {
     } on FirebaseAuthException catch (e) {
       isLoading.value = false;
       await getStorage.write('error', e.code);
+      showDialogBox("Error", e.code);
     }
   }
 

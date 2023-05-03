@@ -6,11 +6,10 @@ import 'package:icons_plus/icons_plus.dart';
 import 'package:logger/logger.dart';
 import 'package:pharma_go_v2_app/constant/colurs.dart';
 import 'package:pharma_go_v2_app/controllers/auth/login_controller.dart';
-import 'package:pharma_go_v2_app/presentation/widgets/alert_boxes/get_alert.dart';
-import 'package:pharma_go_v2_app/presentation/widgets/components/cus_main_button.dart';
-import 'package:pharma_go_v2_app/presentation/widgets/components/goole_button.dart';
-import 'package:pharma_go_v2_app/presentation/widgets/components/text_field.dart';
-import 'package:pharma_go_v2_app/presentation/widgets/components/text_icon_button.dart';
+import 'package:pharma_go_v2_app/presentation/widgets/components/button/main_buttons/cus_main_button.dart';
+import 'package:pharma_go_v2_app/presentation/widgets/components/button/main_buttons/goole_button.dart';
+import 'package:pharma_go_v2_app/presentation/widgets/components/button/icon_buttons/text_icon_button.dart';
+import 'package:pharma_go_v2_app/presentation/widgets/components/text_fields/text_field.dart';
 import 'package:pharma_go_v2_app/presentation/widgets/screen/custom_heading.dart';
 import 'package:pharma_go_v2_app/routes/app_pages.dart';
 
@@ -121,15 +120,19 @@ class LoginPage extends GetView<LoginController> {
                                       : CutomMainButton(
                                           text: "Sign In",
                                           onTap: () async {
-                                            waitingDialogBox();
+                                            //  waitingDialogBox();
                                             await controller.login();
-                                            if (controller.isSuccessed.value) {
-                                              Logger().i(
-                                                  'uID - ${controller.getStorage.read('uID')} | email - ${controller.getStorage.read('email')}');
-                                            } else {
-                                              Logger().e(
-                                                  'Error - ${controller.getStorage.read('error')}');
-                                            }
+                                            // showDialogBox(
+                                            //   "Success",
+                                            //   "login Success",
+                                            // );
+                                            // if (controller.isSuccessed.value) {
+                                            //   Logger().i(
+                                            //       'uID - ${controller.getStorage.read('uID')} | email - ${controller.getStorage.read('email')}');
+                                            // } else {
+                                            //   Logger().e(
+                                            //       'Error - ${controller.getStorage.read('error')}');
+                                            // }
                                           },
                                         ),
                                 ),
@@ -152,7 +155,7 @@ class LoginPage extends GetView<LoginController> {
             //^ Move to registration button
             Positioned(
               top: screenSize.height * .32,
-              child: TextIconButton(
+              child: LoginTextIconButton(
                 icon: const Icon(
                   HeroIcons.arrow_right,
                   size: 40,

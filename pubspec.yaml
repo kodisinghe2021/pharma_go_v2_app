@@ -56,6 +56,8 @@ dependencies:
   dropdown_textfield: ^1.0.8
   flutter_onboarding_slider: ^1.0.9
   location: ^4.4.0
+  animated_bottom_navigation_bar: ^1.2.0
+  flip_card: ^0.7.0
   # geolocator: ^9.0.2
   # geocoding: ^2.1.0
   # google_maps_flutter: ^2.2.5

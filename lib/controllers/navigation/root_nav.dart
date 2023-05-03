@@ -9,7 +9,7 @@ class RootNav {
     try {
       String uID = await _storage.read('uID');
       if (uID != null) {
-        Get.offAllNamed(Routes.HOME);
+        Get.offAllNamed(Routes.MAINNAVBAR);
       } else {
         Get.offAllNamed(Routes.LOGIN);
       }

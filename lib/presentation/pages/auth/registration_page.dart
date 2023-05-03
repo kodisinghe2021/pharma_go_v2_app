@@ -8,9 +8,10 @@ import 'package:logger/logger.dart';
 import 'package:pharma_go_v2_app/constant/box_shadows.dart';
 import 'package:pharma_go_v2_app/constant/colurs.dart';
 import 'package:pharma_go_v2_app/controllers/auth/registration_controller.dart';
-import 'package:pharma_go_v2_app/presentation/widgets/components/cus_main_button.dart';
-import 'package:pharma_go_v2_app/presentation/widgets/components/text_field.dart';
-import 'package:pharma_go_v2_app/presentation/widgets/components/text_icon_button.dart';
+import 'package:pharma_go_v2_app/presentation/widgets/alert_boxes/get_alert.dart';
+import 'package:pharma_go_v2_app/presentation/widgets/components/button/main_buttons/cus_main_button.dart';
+import 'package:pharma_go_v2_app/presentation/widgets/components/button/icon_buttons/text_icon_button.dart';
+import 'package:pharma_go_v2_app/presentation/widgets/components/text_fields/text_field.dart';
 import 'package:pharma_go_v2_app/presentation/widgets/screen/custom_heading.dart';
 import 'package:pharma_go_v2_app/routes/app_pages.dart';
 
@@ -201,7 +202,8 @@ class RegistrationPage extends GetView<RegistrationController> {
                             //   color: Colors.redAccent,
                             child: controller.isLoading.value
                                 ? const Center(
-                                    child: CircularProgressIndicator())
+                                    child: CircularProgressIndicator(),
+                                  )
                                 : CutomMainButton(
                                     text: "Register",
                                     onTap: () async {
@@ -209,6 +211,8 @@ class RegistrationPage extends GetView<RegistrationController> {
                                       controller.isLoading.value = true;
                                       controller.addUser();
                                       controller.isLoading.value = false;
+                                      showDialogBox("Successfull",
+                                          "Congratulations you are added to our client base. ");
                                     },
                                   ),
                           ),
@@ -234,7 +238,7 @@ class RegistrationPage extends GetView<RegistrationController> {
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
-                  child: TextIconButton(
+                  child: LoginTextIconButton(
                     icon: const Icon(
                       HeroIcons.arrow_right,
                       size: 40,
@@ -255,61 +259,3 @@ class RegistrationPage extends GetView<RegistrationController> {
     );
   }
 }
-
-// OnBoardingSlider slider(Size screenSize, TextEditingController controller) =>
-//     OnBoardingSlider(
-//       headerBackgroundColor: Colors.amber,
-//       finishButtonText: 'Register',
-//       finishButtonStyle: const FinishButtonStyle(
-//         backgroundColor: Colors.black,
-//       ),
-//       skipTextButton: const Text('Skip'),
-//       trailing: const Text('Login'),
-//       background: [
-//         SizedBox(
-//           height: screenSize.height * .1,
-//           //    color: Colors.redAccent,
-//           child: CustomTextField(
-//             controller: controller,
-//             labelText: 'Passward here',
-//             suffix: IconButton(
-//               onPressed: () {},
-//               icon: const Icon(Bootstrap.mailbox2),
-//             ),
-//           ),
-//         ),
-//         Container(
-//           color: Colors.white12,
-//           width: 100,
-//           height: 100,
-//         ),
-//       ],
-//       totalPage: 2,
-//       speed: 1.8,
-//       pageBodies: [
-//         SizedBox(
-//           height: screenSize.height * .1,
-//           //    color: Colors.redAccent,
-//           child: CustomTextField(
-//             controller: controller,
-//             labelText: 'Passward here',
-//             suffix: IconButton(
-//               onPressed: () {},
-//               icon: const Icon(Bootstrap.mailbox2),
-//             ),
-//           ),
-//         ),
-//         SizedBox(
-//           height: screenSize.height * .1,
-//           //    color: Colors.redAccent,
-//           child: CustomTextField(
-//             controller: controller,
-//             labelText: 'Passward here',
-//             suffix: IconButton(
-//               onPressed: () {},
-//               icon: const Icon(Bootstrap.mailbox2),
-//             ),
-//           ),
-//         ),
-//       ],
-//     );

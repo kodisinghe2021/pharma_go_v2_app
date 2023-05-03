@@ -1,68 +1,89 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:io';
+
+import 'package:flip_card/flip_card.dart';
+import 'package:flip_card/flip_card_controller.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-// import 'package:google_ml_kit/google_ml_kit.dart';
+import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:pharma_go_v2_app/routes/navigator/navigator.dart';
+import 'package:logger/logger.dart';
+import 'package:pharma_go_v2_app/presentation/widgets/alert_boxes/get_alert.dart';
 
 class HomeController extends GetxController {
   var textScanning = false.obs;
-
-  XFile? imageFile;
+  var filePath = ''.obs;
+  File imageFile = File('');
+  FlipCardController flipCardController = FlipCardController();
+  CardSide currentCardSide = CardSide.FRONT;
 
   var scannedText = ''.obs;
+  var text = 'text'.obs;
+//* create instance for Input image
+  late InputImage inputImage;
+  late RecognizedText recognizedText;
+//* create text recognisor
+  final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
 
-  FirebaseAuth _auth = FirebaseAuth.instance;
+//* text recognism function
+  Future<void> getRecognisedText() async {
+    Logger().i("Inside getRecognisedText");
+    if (imageFile.path.isNotEmpty) {
+      try {
+        inputImage = InputImage.fromFile(imageFile);
 
-  GetStorage _storage = GetStorage();
+        Logger().i("inside try catch");
+        recognizedText = await textRecognizer.processImage(inputImage);
+        //String text = recognizedText.text;
+        Logger().i(
+            "image readed -length of blocks - ${recognizedText.blocks.length}");
+        for (TextBlock block in recognizedText.blocks) {
+          // final Rect rect = block.boundingBox;
+          // final List<Point<int>> cornerPoints = block.cornerPoints;
+          // final String text = block.text;
+          // final List<String> languages = block.recognizedLanguages;
+
+          for (TextLine line in block.lines) {
+            // Same getters as TextBlock
+            for (TextElement element in line.elements) {
+              scannedText.value = "${scannedText.value} ${element.text}";
+              Logger().i(element.text);
+              // Same getters as TextBlock
+            }
+          }
+        }
+        textRecognizer.close();
+      } catch (e) {
+        textRecognizer.close();
+        Logger().e("Error reading \n$e");
+      }
+    } else {
+      showDialogBox("Error", "please select the image first");
+    }
+  }
 
   Future<void> getImage(ImageSource imageSource) async {
+    scannedText.value = '';
+    Logger().i("inside getImage");
     try {
-      final pickedImage = await ImagePicker().pickImage(source: imageSource);
+      Logger().i("inside try");
+      final XFile? pickedImage =
+          await ImagePicker().pickImage(source: imageSource);
       if (pickedImage != null) {
-        textScanning.value = true;
-        imageFile = pickedImage;
+        // pickedImageXFile = pickedImage;
+        filePath.value = pickedImage.path;
+        imageFile = File(pickedImage.path);
+        Logger().i("image picked - ${pickedImage.path}");
+        update();
         //  getRecognisedText(pickedImage);
       }
     } catch (e) {
+      Logger().e(e);
       textScanning.value = false;
-      imageFile = null;
+      // pickedImageXFile = null;
       scannedText.value = "error text";
     }
   }
 
-  Future<void> getRecognisedText(XFile? imageFile) async {
-    try {
-      //^ get image from the file using file path
-    //  final inputImage = InputImage.fromFilePath(imageFile!.path);
-
-      //^ make RecognizedText object
-    //  final textDetector = GoogleMlKit.vision.textRecognizer();
-      //^ get text block as RecognizedText
-      // RecognizedText recognizedText =
-      //     await textDetector.processImage(inputImage);
-
-      //^ close detector and clear scannedText variable
-   //   await textDetector.close();
-      scannedText.value = "";
-
-      //^read lines from blocks
-      // for (TextBlock block in recognizedText.blocks) {
-      //   for (TextLine line in block.lines) {
-      //     scannedText.value = "$scannedText${line.text}\n";
-      //   }
-      // }
-
-      textScanning.value = false;
-    } catch (e) {
-      scannedText.value = "Not Readable";
-      textScanning.value = false;
-    }
-  }
-
-  Future<void> logout() async {
-    await _auth.signOut();
-    await _storage.erase();
-    navigatorLogging();
+  Future<void> flip() async {
+    flipCardController.toggleCard();
   }
 }
