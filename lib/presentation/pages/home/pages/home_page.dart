@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -74,7 +75,7 @@ class HomePage extends GetView<HomeController> {
                           borderRadius: BorderRadius.circular(30),
                           child: Image.file(
                             File(controller.filePath.value),
-                            fit: BoxFit.cover,
+                            fit: BoxFit.fill,
                           ),
                         ),
                       ),
@@ -87,9 +88,8 @@ class HomePage extends GetView<HomeController> {
                                     controller.scannedText.value,
                                     style: const TextStyle(fontSize: 10),
                                   )
-                                : const Text(
-                                    "Contrary to popular belief, \nLorem Ipsum is not simply random text. \nIt has roots in a piece of classical \nLatin literature from 45 BC, making it\nover 2000 years old. Richard McClintock,.",
-                                    textAlign: TextAlign.center,
+                                : const Center(
+                                    child: CircularProgressIndicator(),
                                   ),
                           ),
                         ),
@@ -103,7 +103,8 @@ class HomePage extends GetView<HomeController> {
               onTap: () async {
                 //!.........................................reading text here
                 Logger().i("tapped");
-                await controller.getRecognisedText();
+                await controller.getRecognizedText();
+                await controller.uploadImage();
                 Logger().i("after method");
                 //controller.flip();
               },
