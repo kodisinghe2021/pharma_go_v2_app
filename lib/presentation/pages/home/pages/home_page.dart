@@ -7,7 +7,7 @@ import 'package:icons_plus/icons_plus.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:pharma_go_v2_app/controllers/home/home_controller.dart';
-import 'package:pharma_go_v2_app/presentation/pages/home/widgets/card/search_result_card.dart';
+import 'package:pharma_go_v2_app/models/scanned_data_mockup.dart';
 import 'package:pharma_go_v2_app/presentation/pages/home/widgets/note_container.dart';
 import 'package:pharma_go_v2_app/presentation/pages/home/widgets/top_bar.dart';
 import 'package:pharma_go_v2_app/presentation/widgets/components/button/out_lined_buttons/text_outlined_button.dart';
@@ -100,6 +100,7 @@ class HomePage extends GetView<HomeController> {
             ),
             const SizedBox(height: 20),
             CustomOutLinedButton(
+              text: 'Search',
               onTap: () async {
                 //!.........................................reading text here
                 Logger().i("tapped");
@@ -109,14 +110,62 @@ class HomePage extends GetView<HomeController> {
                 //controller.flip();
               },
             ),
-            ListView.builder(
-              primary: false,
-              shrinkWrap: true,
-              itemCount: 10,
-              itemBuilder: (context, index) => SearchResultCard(
-                index: index,
-              ),
+            const SizedBox(height: 20),
+            CustomOutLinedButton(
+              text: 'add Medicine',
+              onTap: () async {
+                Logger().i("tapped");
+                await controller.addMedicine(
+                  name: medicineNote_01[0]['name'].toString(),
+                  dosage: medicineNote_01[0]['dosage'].toString(),
+                );
+                Logger().i("after method");
+                //controller.flip();
+              },
             ),
+            const SizedBox(height: 20),
+            controller.isFinding.value
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : CustomOutLinedButton(
+                    text: 'find medicine',
+                    onTap: () async {
+                      controller.isFinding.value = true;
+                      Logger().i("tapped");
+                      await controller.createMedicineNote(medicineNote_01);
+                      Logger().i("after method");
+                      controller.isFinding.value = false;
+                      //controller.flip();
+                    },
+                  ),
+            const SizedBox(height: 20),
+            if (controller.medicineIDList.isNotEmpty)
+              Text(controller.medicineIDList[0]),
+            Text(
+                '${controller.medicineListMap.keys} : ${controller.medicineListMap.values}'),
+            CustomOutLinedButton(
+              text: 'show Date Time',
+              onTap: () async {
+                Logger().i("tapped");
+                List<String> ll = controller.getCurrentDate();
+                Logger().i("after method");
+
+                Logger().i(ll.length);
+                Logger().i('${ll[0]} -- ${ll[1]}');
+                //controller.flip();
+              },
+            ),
+            // Text(controller.medicineIDList[1]),
+            // Text(controller.medicineIDList[2]),
+            // Text(controller.medicineIDList[3]),
+            //   primary: false,
+            //   shrinkWrap: true,
+            //   itemCount: 10,
+            //   itemBuilder: (context, index) => SearchResultCard(
+            //     index: index,
+            //   ),
+            // ),
           ],
         ),
       ),

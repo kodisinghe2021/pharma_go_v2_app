@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:logger/logger.dart';
+import 'package:pharma_go_v2_app/constant/enums.dart';
 import 'package:pharma_go_v2_app/presentation/widgets/alert_boxes/get_alert.dart';
 import 'package:pharma_go_v2_app/routes/navigator/navigator.dart';
 

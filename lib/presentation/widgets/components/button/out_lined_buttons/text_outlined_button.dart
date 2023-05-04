@@ -4,10 +4,12 @@ import 'package:pharma_go_v2_app/constant/fonts.dart';
 class CustomOutLinedButton extends StatelessWidget {
   const CustomOutLinedButton({
     required this.onTap,
+    required this.text,
     super.key,
   });
 
   final Function() onTap;
+  final String text;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class CustomOutLinedButton extends StatelessWidget {
           ),
         ),
         child: Center(
-          child: buttonText('Search'),
+          child: buttonText(text),
         ),
       ),
     );

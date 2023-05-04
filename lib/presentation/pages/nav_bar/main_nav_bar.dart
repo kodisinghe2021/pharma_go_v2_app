@@ -23,7 +23,9 @@ class MainNavBar extends GetView<MainNavBarController> {
           // elevation: 0.0,
           // backgroundColor: Colors.transparent,
           leading: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              controller.logout();
+            },
             icon: const Icon(
               BoxIcons.bx_log_out_circle,
               size: 40,
@@ -52,9 +54,7 @@ class MainNavBar extends GetView<MainNavBarController> {
           controller: controller.tabController,
           children: controller.tabPages,
         ),
-     
       ),
     );
   }
-
 }

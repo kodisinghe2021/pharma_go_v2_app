@@ -209,7 +209,7 @@ class RegistrationPage extends GetView<RegistrationController> {
                                     onTap: () async {
                                       Logger().i("wait............");
                                       controller.isLoading.value = true;
-                                      controller.addUser();
+                                     await controller.addUser();
                                       controller.isLoading.value = false;
                                       showDialogBox("Successfull",
                                           "Congratulations you are added to our client base. ");
