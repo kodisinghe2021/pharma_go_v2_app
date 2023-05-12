@@ -14,8 +14,9 @@ import 'package:pharma_go_v2_app/client/presentation/widgets/components/text_fie
 import 'package:pharma_go_v2_app/client/presentation/widgets/screen/custom_heading.dart';
 import 'package:pharma_go_v2_app/routes/app_pages.dart';
 
-class RegistrationPage extends GetView<RegistrationController> {
-  RegistrationPage({super.key});
+class RegistrationPagePharma extends GetView<RegistrationController> {
+  RegistrationPagePharma({super.key});
+
   final Location _location = Location.instance;
   @override
   Widget build(BuildContext context) {
@@ -54,7 +55,7 @@ class RegistrationPage extends GetView<RegistrationController> {
                             //    color: Colors.redAccent,
                             child: CustomTextField(
                               controller: controller.pharmacyName,
-                              labelText: 'Pharmacy name here',
+                              labelText: 'Your name here',
                               suffix: IconButton(
                                 onPressed: () {},
                                 icon: const Icon(Bootstrap.person),
@@ -67,7 +68,7 @@ class RegistrationPage extends GetView<RegistrationController> {
                             //    color: Colors.redAccent,
                             child: CustomTextField(
                               controller: controller.contact,
-                              labelText: 'Contact number here',
+                              labelText: 'Phone number here',
                               suffix: IconButton(
                                 onPressed: () {},
                                 icon: const Icon(Bootstrap.phone),
@@ -150,7 +151,7 @@ class RegistrationPage extends GetView<RegistrationController> {
                             //    color: Colors.redAccent,
                             child: CustomTextField(
                               controller: controller.registrationNumber,
-                              labelText: 'Registration number here',
+                              labelText: 'NIC here',
                               suffix: IconButton(
                                 onPressed: () {},
                                 icon: const Icon(Bootstrap.indent),

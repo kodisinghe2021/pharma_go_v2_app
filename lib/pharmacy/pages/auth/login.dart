@@ -6,18 +6,18 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:logger/logger.dart';
 import 'package:pharma_go_v2_app/client/constant/colurs.dart';
-import 'package:pharma_go_v2_app/client/controllers/auth/login_controller.dart';
 import 'package:pharma_go_v2_app/client/presentation/widgets/components/button/icon_buttons/text_icon_button.dart';
 import 'package:pharma_go_v2_app/client/presentation/widgets/components/button/main_buttons/cus_main_button.dart';
 import 'package:pharma_go_v2_app/client/presentation/widgets/components/button/main_buttons/goole_button.dart';
 import 'package:pharma_go_v2_app/client/presentation/widgets/components/text_fields/text_field.dart';
 import 'package:pharma_go_v2_app/client/presentation/widgets/screen/custom_heading.dart';
+import 'package:pharma_go_v2_app/pharmacy/controllers/auth/login/login_con.dart';
 import 'package:pharma_go_v2_app/routes/app_pages.dart';
 
-class LoginPage extends GetView<LoginController> {
-  LoginPage({super.key});
-  @override
-  LoginController controller = Get.put(LoginController());
+class LoginPharama extends StatelessWidget {
+  LoginPharama({super.key});
+
+  LoginPharmaCon controller = Get.put<LoginPharmaCon>(LoginPharmaCon());
 
   @override
   Widget build(BuildContext context) {
@@ -173,10 +173,10 @@ class LoginPage extends GetView<LoginController> {
             ),
             TextButton(
               onPressed: () {
-                Get.offAllNamed(Routes.LOGINPHARMA);
+                Get.offAllNamed(Routes.LOGIN);
               },
               child: Text(
-                "I'm pharmacy..",
+                "I'm client..",
                 style: GoogleFonts.aBeeZee(
                   fontSize: 20,
                   color: Colors.blue,

@@ -8,8 +8,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:location/location.dart';
 import 'package:logger/logger.dart';
 import 'package:pharma_go_v2_app/client/presentation/widgets/alert_boxes/get_alert.dart';
-import 'package:pharma_go_v2_app/client/routes/app_pages.dart';
-import 'package:pharma_go_v2_app/client/routes/navigator/navigator.dart';
+import 'package:pharma_go_v2_app/routes/app_pages.dart';
+import 'package:pharma_go_v2_app/routes/navigator/navigator.dart';
 
 class RegistrationController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -33,9 +33,9 @@ class RegistrationController extends GetxController {
   var isButtonVisible = false.obs;
 
   //* textediting controllers
-  TextEditingController name = TextEditingController();
-  TextEditingController mobile = TextEditingController();
-  TextEditingController nic = TextEditingController();
+  TextEditingController pharmacyName = TextEditingController();
+  TextEditingController contact = TextEditingController();
+  TextEditingController registrationNumber = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   //* map of location data
@@ -55,6 +55,7 @@ class RegistrationController extends GetxController {
       isSuccessed.value = true;
       await getStorage.write('uID', _userCredential.user!.uid);
       await getStorage.write('email', _userCredential.user!.email);
+      await getStorage.write('userIS', 'client');
     } on FirebaseAuthException catch (e) {
       Logger().e(e.code);
       isLoading.value = false;
@@ -130,10 +131,10 @@ class RegistrationController extends GetxController {
 //* add user to fire Store
   Future<void> addUser() async {
     bool isSigninSuccess = false;
-    if (name.text.isNotEmpty &&
-        mobile.text.isNotEmpty &&
+    if (pharmacyName.text.isNotEmpty &&
+        contact.text.isNotEmpty &&
         locationData.isNotEmpty &&
-        nic.text.isNotEmpty &&
+        registrationNumber.text.isNotEmpty &&
         email.text.isNotEmpty &&
         password.text.isNotEmpty) {
       isSigninSuccess = await createUser();
@@ -141,14 +142,14 @@ class RegistrationController extends GetxController {
       if (isSigninSuccess) {
         try {
           await _firestore
-              .collection('user-collection')
+              .collection('pharmacy-collection')
               .doc(_userCredential.user!.uid)
               .set({
             'id': _userCredential.user!.uid,
-            'name': name.text,
-            'mobile': mobile.text,
-            'nic': nic.text,
-            'medicine-history': [],
+            'pharmacy-name': pharmacyName.text,
+            'contact': contact.text,
+            'registration-number': registrationNumber.text,
+            'availability-map': {},
             'location': locationData,
             'email': email.text,
             'password': password.text,

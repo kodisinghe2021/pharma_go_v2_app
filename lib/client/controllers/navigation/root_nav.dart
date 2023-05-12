@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:pharma_go_v2_app/client/routes/app_pages.dart';
+import 'package:pharma_go_v2_app/routes/app_pages.dart';
 
 class RootNav {
   final GetStorage _storage = GetStorage();

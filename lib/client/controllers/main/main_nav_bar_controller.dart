@@ -6,7 +6,7 @@ import 'package:pharma_go_v2_app/client/presentation/pages/chat/chat.dart';
 import 'package:pharma_go_v2_app/client/presentation/pages/history/history.dart';
 import 'package:pharma_go_v2_app/client/presentation/pages/home/pages/home_page.dart';
 import 'package:pharma_go_v2_app/client/presentation/pages/medicine_list/medicine.dart';
-import 'package:pharma_go_v2_app/client/routes/navigator/navigator.dart';
+import 'package:pharma_go_v2_app/routes/navigator/navigator.dart';
 
 class MainNavBarController extends GetxController
     with GetTickerProviderStateMixin {
