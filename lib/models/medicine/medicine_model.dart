@@ -19,14 +19,14 @@ class MedicineModel {
   }
 
 
-  Map<String, dynamic> toJson(MedicineModel medicineModel) {
-    Map<String, dynamic> map = {
-      'medicineID': medicineModel.medicineID,
-      'name': medicineModel.name,
-      'dossage': medicineModel.dossage,
-    };
-    return map;
-  }
+  // Map<String, dynamic> toJson(MedicineModel medicineModel) {
+  //   Map<String, dynamic> map = {
+  //     'medicineID': medicineModel.medicineID,
+  //     'name': medicineModel.name,
+  //     'dossage': medicineModel.dossage,
+  //   };
+  //   return map;
+  // }
 
 
 }

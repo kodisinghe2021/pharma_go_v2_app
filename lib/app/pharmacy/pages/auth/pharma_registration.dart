@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:location/location.dart';
 import 'package:logger/logger.dart';
 import 'package:pharma_go_v2_app/app/client/constant/box_shadows.dart';
 import 'package:pharma_go_v2_app/app/client/constant/colurs.dart';
-import 'package:pharma_go_v2_app/app/client/controllers/auth/registration_controller.dart';
+import 'package:pharma_go_v2_app/app/client/presentation/widgets/alert_boxes/get_alert.dart';
 import 'package:pharma_go_v2_app/app/client/presentation/widgets/components/button/icon_buttons/text_icon_button.dart';
 import 'package:pharma_go_v2_app/app/client/presentation/widgets/components/button/main_buttons/cus_main_button.dart';
 import 'package:pharma_go_v2_app/app/client/presentation/widgets/components/text_fields/text_field.dart';
 import 'package:pharma_go_v2_app/app/client/presentation/widgets/screen/custom_heading.dart';
+import 'package:pharma_go_v2_app/app/pharmacy/controllers/auth/registration/pharma_registration_controller.dart';
 import 'package:pharma_go_v2_app/routes/app_pages.dart';
 
-class ClientRegistrationPage extends GetView<ClientRegistrationController> {
-  ClientRegistrationPage({super.key});
+class PharmaRegistrationPage extends GetView<PharmaRegistrationController> {
+  const PharmaRegistrationPage({super.key});
 
-  final Location _location = Location.instance;
+  // final Location _location = Location.instance;
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
@@ -24,14 +24,12 @@ class ClientRegistrationPage extends GetView<ClientRegistrationController> {
       child: Scaffold(
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-
-          //--- registration full page
           child: SizedBox(
             height: screenSize.height * 1.1,
             width: screenSize.width,
             child: Stack(
               children: [
-                //--- background Container
+                //^ background Container
                 Container(
                   width: double.infinity,
                   height: double.infinity,
@@ -39,10 +37,9 @@ class ClientRegistrationPage extends GetView<ClientRegistrationController> {
                     gradient: backGroundGradient(),
                   ),
                 ),
-
-                //--- Form
+                //^ Form
                 Positioned(
-                  top: screenSize.height * .23,
+                  top: screenSize.height * .2,
                   child: Obx(
                     () => Container(
                       width: screenSize.width,
@@ -52,13 +49,12 @@ class ClientRegistrationPage extends GetView<ClientRegistrationController> {
                       ),
                       child: Column(
                         children: [
-                          //--- name field
                           SizedBox(
                             height: screenSize.height * .1,
                             //    color: Colors.redAccent,
                             child: CustomTextField(
                               controller: controller.name,
-                              labelText: 'Your name here',
+                              labelText: 'Pharmacy name here',
                               suffix: IconButton(
                                 onPressed: () {},
                                 icon: const Icon(Bootstrap.person),
@@ -66,10 +62,9 @@ class ClientRegistrationPage extends GetView<ClientRegistrationController> {
                             ),
                           ),
                           const SizedBox(height: 10),
-
-                          //--- contact number field
                           SizedBox(
                             height: screenSize.height * .1,
+                            //    color: Colors.redAccent,
                             child: CustomTextField(
                               controller: controller.contact,
                               labelText: 'Contact number here',
@@ -80,8 +75,6 @@ class ClientRegistrationPage extends GetView<ClientRegistrationController> {
                             ),
                           ),
                           const SizedBox(height: 10),
-
-                          //--- get Location button
                           SizedBox(
                             height: screenSize.height * .1,
                             child: controller.isLocationLoading.value
@@ -152,14 +145,12 @@ class ClientRegistrationPage extends GetView<ClientRegistrationController> {
                                   ),
                           ),
                           const SizedBox(height: 10),
-
-                          //--- nic number field
                           SizedBox(
                             height: screenSize.height * .1,
                             //    color: Colors.redAccent,
                             child: CustomTextField(
-                              controller: controller.nic,
-                              labelText: 'nic number here',
+                              controller: controller.registrationID,
+                              labelText: 'Registration ID here',
                               suffix: IconButton(
                                 onPressed: () {},
                                 icon: const Icon(Bootstrap.indent),
@@ -167,8 +158,6 @@ class ClientRegistrationPage extends GetView<ClientRegistrationController> {
                             ),
                           ),
                           const SizedBox(height: 10),
-
-                          //--- email field
                           SizedBox(
                             height: screenSize.height * .1,
                             //    color: Colors.redAccent,
@@ -182,10 +171,9 @@ class ClientRegistrationPage extends GetView<ClientRegistrationController> {
                             ),
                           ),
                           const SizedBox(height: 10),
-
-                          //--- passward filed
                           SizedBox(
                             height: screenSize.height * .1,
+                            //    color: Colors.redAccent,
                             child: CustomTextField(
                               isObsecure: controller.isObsecure.value,
                               controller: controller.password,
@@ -202,7 +190,6 @@ class ClientRegistrationPage extends GetView<ClientRegistrationController> {
                             ),
                           ),
                           const SizedBox(height: 10),
-
                           Container(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 10,
@@ -221,6 +208,8 @@ class ClientRegistrationPage extends GetView<ClientRegistrationController> {
                                       controller.isLoading.value = true;
                                       await controller.addUser();
                                       controller.isLoading.value = false;
+                                      showDialogBox("Successfull",
+                                          "Congratulations you are added to our client base. ");
                                     },
                                   ),
                           ),
@@ -229,7 +218,7 @@ class ClientRegistrationPage extends GetView<ClientRegistrationController> {
                     ),
                   ),
                 ),
-                //--- heading text
+                //^ Header
                 Container(
                   width: screenSize.width,
                   height: screenSize.height * .2,
@@ -240,12 +229,10 @@ class ClientRegistrationPage extends GetView<ClientRegistrationController> {
                     ],
                   ),
                   child: const CustomHeding(
-                    title: "Im client",
+                    title: "Happy to join",
                     text: "Don’t warry. \nyour details are secure with us",
                   ),
                 ),
-
-                //---- navigator button to registration
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: LoginTextIconButton(
@@ -257,10 +244,10 @@ class ClientRegistrationPage extends GetView<ClientRegistrationController> {
                     text: "Already have account? Login here",
                     onTap: () {
                       Logger().d("Tapped");
-                      Get.offAllNamed(Routes.CLIENTLOGIN);
+                      Get.offAllNamed(Routes.PHARMALOGIN);
                     },
                   ),
-                ),
+                )
               ],
             ),
           ),

@@ -1,5 +1,3 @@
-// import 'dart:ui';
-
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -8,18 +6,19 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:logger/logger.dart';
 import 'package:pharma_go_v2_app/app/client/constant/colurs.dart';
-import 'package:pharma_go_v2_app/app/client/controllers/auth/login_controller.dart';
 import 'package:pharma_go_v2_app/app/client/presentation/widgets/components/button/icon_buttons/text_icon_button.dart';
 import 'package:pharma_go_v2_app/app/client/presentation/widgets/components/button/main_buttons/cus_main_button.dart';
 import 'package:pharma_go_v2_app/app/client/presentation/widgets/components/button/main_buttons/goole_button.dart';
 import 'package:pharma_go_v2_app/app/client/presentation/widgets/components/text_fields/text_field.dart';
 import 'package:pharma_go_v2_app/app/client/presentation/widgets/screen/custom_heading.dart';
+import 'package:pharma_go_v2_app/app/pharmacy/controllers/auth/login/pharma_login_controller.dart';
 import 'package:pharma_go_v2_app/routes/app_pages.dart';
 
-class ClientLoginPage extends GetView<ClientLoginController> {
-  ClientLoginPage({super.key});
-  @override
-  ClientLoginController controller = Get.put(ClientLoginController());
+class PharmaLoginPage extends StatelessWidget {
+  PharmaLoginPage({super.key});
+
+  PharmaLoginController controller =
+      Get.put<PharmaLoginController>(PharmaLoginController());
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +51,7 @@ class ClientLoginPage extends GetView<ClientLoginController> {
                         width: screenSize.width,
                         // color: Colors.greenAccent,
                         child: const CustomHeding(
-                          title: "Im Client!",
+                          title: "Im pharmacy",
                           text: "Welcome back you've\n been missed!",
                         ),
                       ),
@@ -103,6 +102,7 @@ class ClientLoginPage extends GetView<ClientLoginController> {
                                       onPressed: () {
                                         controller.isObsecure.value =
                                             !controller.isObsecure.value;
+                                        Logger().i(controller.isObsecure.value);
                                       },
                                       icon: controller.isObsecure.value
                                           ? const Icon(Bootstrap.eye_slash_fill)
@@ -152,18 +152,16 @@ class ClientLoginPage extends GetView<ClientLoginController> {
                 text: "Haven't account? Register here",
                 onTap: () {
                   Logger().d("Tapped");
-                  Get.toNamed(Routes.CLIENTREGISTRATION);
+                  Get.toNamed(Routes.PHARMAREGISTRATION);
                 },
               ),
             ),
-
-            // navigate to pharmacy side
             TextButton(
               onPressed: () {
-                Get.offAllNamed(Routes.PHARMALOGIN);
+                Get.offAllNamed(Routes.CLIENTLOGIN);
               },
               child: Text(
-                "I'm pharmacy..",
+                "I'm client..",
                 style: GoogleFonts.aBeeZee(
                   fontSize: 20,
                   color: Colors.blue,

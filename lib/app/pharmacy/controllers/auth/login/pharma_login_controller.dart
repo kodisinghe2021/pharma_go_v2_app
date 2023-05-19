@@ -3,21 +3,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:logger/logger.dart';
 import 'package:pharma_go_v2_app/app/client/presentation/widgets/alert_boxes/get_alert.dart';
 import 'package:pharma_go_v2_app/data/object_keeper.dart';
 import 'package:pharma_go_v2_app/dependencies/firebase_instance.dart';
-import 'package:pharma_go_v2_app/models/user/user_model.dart';
+import 'package:pharma_go_v2_app/models/pharmacy/phama_model.dart';
 import 'package:pharma_go_v2_app/routes/app_pages.dart';
 
-class ClientLoginController extends GetxController {
+class PharmaLoginController extends GetxController {
 //*----------------------instanse
   //get back end.
   final BackEndSupport _backEndSupport = BackEndSupport();
 
   // get local stoarage.
   final _localStorage = GetStorage();
-
 
 //*-----------------------controllcers
   TextEditingController email = TextEditingController();
@@ -29,7 +27,6 @@ class ClientLoginController extends GetxController {
   var isObsecure = true.obs;
 
 //&----------------------functions---------------------------------
-
   //--- fields validation
   bool fieldValidation() {
     if (email.text.isNotEmpty && password.text.isNotEmpty) {
@@ -64,14 +61,13 @@ class ClientLoginController extends GetxController {
       //--- insert local data
       await _localStorage.write('uID', credential.user!.uid);
       // await _localStorage.write('email', credential.user!.email.toString());
-      await _localStorage.write('userIS', 'client');
-    
+      await _localStorage.write('userIS', 'pharma');
 
       //--- set current user
-      await setCurrentUser(credential.user!.uid);
+      await getCurrentPharmacyDetails(credential.user!.uid);
 
       //--- navigate to Main
-      Get.offAllNamed(Routes.CLIENTMAINNAVBAR);
+      Get.offAllNamed(Routes.PHARMANAVBAR);
 
       //--- on error
     } on FirebaseAuthException catch (e) {
@@ -83,11 +79,11 @@ class ClientLoginController extends GetxController {
   }
 
   //--- get user data and create current user model
-  Future<void> setCurrentUser(String userID) async {
+  Future<void> getCurrentPharmacyDetails(String userID) async {
     // set path to document.
     DocumentReference docRef = _backEndSupport
         .noSQLStorage()
-        .collection('user-collection')
+        .collection('pharmacy-collection')
         .doc(userID);
 
     //--- get the current document.
@@ -97,10 +93,9 @@ class ClientLoginController extends GetxController {
     Map<String, dynamic> map = snapshot.data() as Map<String, dynamic>;
 
     //--- initialize user model.
-    UserModel model = UserModel.fromJson(map);
+    PharmaModel model = PharmaModel.fromJson(map);
 
     //--- set current user object.
-    setCurrentUserModel(model);
-
+    setCurrentPharmaModel(model);
   }
 }

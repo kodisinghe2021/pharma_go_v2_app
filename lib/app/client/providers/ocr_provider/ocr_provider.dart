@@ -14,20 +14,24 @@ class OCRProvider {
     List<String> scannedText = [];
 
     Logger().i("Inside getRecognisedText");
+    //check image file is Not empty?
     if (imageFile.path.isNotEmpty) {
       Logger().i(imageFile.path);
+
       try {
+        // make InputImage type variable
         inputImage = InputImage.fromFile(imageFile);
+
         Logger().i(inputImage.filePath);
 
-        //   Logger().i("inside try catch");
+        //extract text from image
         recognizedText = await textRecognizer.processImage(inputImage);
-        // Logger().i(
-        //     "image readed -length of blocks - ${recognizedText.blocks.length}");
+
+        // devide text object into words
         for (TextBlock block in recognizedText.blocks) {
-          // Logger().i(block.text);
+
           for (TextLine line in block.lines) {
-            // Logger().i(line.text);
+        
 
             for (TextElement element in line.elements) {
               scannedText.add(element.text);
@@ -47,32 +51,9 @@ class OCRProvider {
       return scannedText;
     }
   }
-
-//! this data import by mockup data until OCR replace
-  Future<List<Map<String, String>>> getMeidcineList(List<String> text) async {
-    // String text = await getRecognizedText(imageFile);
-    if (text.isEmpty) {
-      showDialogBox('Reader Error', 'the medicine note cannot read');
-      return [];
-    }
-    //! this note will be text ...... ^
-    List<String> note = [];
-    List<Map<String, String>> noteList = [];
-    for (var element in note) {
-      Map<String, String> map = {};
-      map.putIfAbsent('name', () => element.split(' ')[0]);
-      map.putIfAbsent('dosage', () => element.split(' ')[1]);
-      map.putIfAbsent('days', () => element.split(' ')[2]);
-      noteList.insert(0, map);
-    }
-    // Logger().i(noteList[0]['name']);
-    // Logger().i(noteList[1]['name']);6
-    // Logger().i(noteList[2]['name']);
-    return noteList;
-  }
-
+  
 // divide array into three sub arrays
-  List<List<String>> dividingAlgo(List<String> textList) {
+  List<List<String>> _dividingAlgo(List<String> textList) {
     List<List<String>> subArrays = [];
     for (int i = 0; i < textList.length; i += 3) {
       subArrays.add(textList.sublist(i, i + 3));
@@ -82,7 +63,7 @@ class OCRProvider {
 
 // map arrays
   Future<List<Map<String, String>>> mapNoteData(List<String> textList) async {
-    List<List<String>> subArrays = dividingAlgo(textList);
+    List<List<String>> subArrays = _dividingAlgo(textList);
     List<Map<String, String>> mapList = [];
     for (var i = 0; i < subArrays.length; i++) {
       Map<String, String> map = {};
