@@ -29,10 +29,7 @@ class OCRProvider {
 
         // devide text object into words
         for (TextBlock block in recognizedText.blocks) {
-
           for (TextLine line in block.lines) {
-        
-
             for (TextElement element in line.elements) {
               scannedText.add(element.text);
               // Logger().i(element.text);
@@ -51,12 +48,12 @@ class OCRProvider {
       return scannedText;
     }
   }
-  
+
 // divide array into three sub arrays
   List<List<String>> _dividingAlgo(List<String> textList) {
     List<List<String>> subArrays = [];
-    for (int i = 0; i < textList.length; i += 3) {
-      subArrays.add(textList.sublist(i, i + 3));
+    for (int i = 0; i < textList.length; i += 4) {
+      subArrays.add(textList.sublist(i, i + 4));
     }
     return subArrays;
   }
@@ -68,8 +65,9 @@ class OCRProvider {
     for (var i = 0; i < subArrays.length; i++) {
       Map<String, String> map = {};
       map['name'] = subArrays[i][0];
-      map['dosage'] = subArrays[i][1];
-      map['days'] = subArrays[i][2];
+      map['dosage_in_note'] = subArrays[i][1];
+      map['frequency'] = subArrays[i][2];
+      map['days'] = subArrays[i][3];
       mapList.insert(0, map);
     }
     return mapList;
