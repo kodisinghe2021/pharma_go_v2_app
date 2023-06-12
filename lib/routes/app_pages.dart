@@ -1,19 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:pharma_go_v2_app/app/client/controllers/auth/login_binding.dart';
-import 'package:pharma_go_v2_app/app/client/controllers/auth/registration_binding.dart';
-import 'package:pharma_go_v2_app/app/client/controllers/main/main_navbar_binding.dart';
-import 'package:pharma_go_v2_app/app/client/controllers/splash/splash_binding.dart';
-import 'package:pharma_go_v2_app/app/client/presentation/pages/auth/login_page.dart';
-import 'package:pharma_go_v2_app/app/client/presentation/pages/auth/registration_page.dart';
-import 'package:pharma_go_v2_app/app/client/presentation/pages/nav_bar/main_nav_bar.dart';
-import 'package:pharma_go_v2_app/app/client/presentation/pages/splash/splash_screen.dart';
-import 'package:pharma_go_v2_app/app/pharmacy/controllers/auth/login/pharma_login_binding.dart';
-import 'package:pharma_go_v2_app/app/pharmacy/controllers/auth/registration/pharma_registration_binding.dart';
-import 'package:pharma_go_v2_app/app/pharmacy/controllers/pharma-nav-controller/pharama_nav_binding.dart';
-import 'package:pharma_go_v2_app/app/pharmacy/pages/auth/pharma_login.dart';
-import 'package:pharma_go_v2_app/app/pharmacy/pages/auth/pharma_registration.dart';
-import 'package:pharma_go_v2_app/app/pharmacy/pages/nav_bar/pharama_nav_bar.dart';
+import 'package:pharma_go_v2_app/features/client/controllers/auth/login_binding.dart';
+import 'package:pharma_go_v2_app/features/client/controllers/auth/registration_binding.dart';
+import 'package:pharma_go_v2_app/features/client/controllers/main/main_navbar_binding.dart';
+import 'package:pharma_go_v2_app/features/client/controllers/splash/splash_binding.dart';
+import 'package:pharma_go_v2_app/features/client/presentation/pages/auth/login_page.dart';
+import 'package:pharma_go_v2_app/features/client/presentation/pages/auth/registration_page.dart';
+import 'package:pharma_go_v2_app/features/client/presentation/pages/nav_bar/main_nav_bar.dart';
+import 'package:pharma_go_v2_app/features/client/presentation/pages/splash/splash_screen.dart';
+import 'package:pharma_go_v2_app/features/pharmacy/controllers/auth/login/pharma_login_binding.dart';
+import 'package:pharma_go_v2_app/features/pharmacy/controllers/auth/registration/pharma_registration_binding.dart';
+import 'package:pharma_go_v2_app/features/pharmacy/controllers/pharma-nav-controller/pharama_nav_binding.dart';
+import 'package:pharma_go_v2_app/features/pharmacy/pages/auth/pharma_login.dart';
+import 'package:pharma_go_v2_app/features/pharmacy/pages/auth/pharma_registration.dart';
+import 'package:pharma_go_v2_app/features/pharmacy/pages/nav_bar/pharama_nav_bar.dart';
 
 part 'routes.dart';
 
