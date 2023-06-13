@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:logger/logger.dart';
+import 'package:pharma_go_v2_app/app/model/pharmacy_card.dart';
 import 'package:pharma_go_v2_app/app/view/client/components/alert_boxes/get_alert.dart';
 import 'package:pharma_go_v2_app/app/view/client/pages/home/widgets/medicin_card.dart';
 import 'package:pharma_go_v2_app/app/view_model/client/home/home_controller.dart';
@@ -16,14 +17,13 @@ class MedicinePharmacyCard extends StatelessWidget {
 
   final HomeController _controller = Get.put<HomeController>(HomeController());
 
-  final List<Map<String, dynamic>>? snapshotData;
+  final List<PharmacyCard>? snapshotData;
   final int pharmacyCardIndex;
   @override
   Widget build(BuildContext context) {
     // variables
     final Size screenSize = MediaQuery.of(context).size;
-    Map<String, dynamic> singleMap = snapshotData![pharmacyCardIndex];
-    List<Map<String, dynamic>> strockMap = singleMap['strockList'];
+    PharmacyCard pharmacyCard = snapshotData![pharmacyCardIndex];
 
     //---------------
     return Container(
@@ -64,8 +64,7 @@ class MedicinePharmacyCard extends StatelessWidget {
                                 child: Container(
                                   alignment: Alignment.centerLeft,
                                   child: thisPageFonts(
-                                    snapshotData![pharmacyCardIndex]
-                                        ['pharmacyID'],
+                                    pharmacyCard.pharmacyID ?? "",
                                     21,
                                   ),
                                 ),
@@ -75,8 +74,7 @@ class MedicinePharmacyCard extends StatelessWidget {
                                 child: Container(
                                   alignment: Alignment.centerLeft,
                                   child: thisPageFonts(
-                                    snapshotData![pharmacyCardIndex]
-                                        ['registrationID'],
+                                    pharmacyCard.registrationID ?? "",
                                     14,
                                   ),
                                 ),
@@ -93,7 +91,7 @@ class MedicinePharmacyCard extends StatelessWidget {
                                 child: Container(
                                   alignment: Alignment.centerLeft,
                                   child: thisPageFonts(
-                                    snapshotData![pharmacyCardIndex]['contact'],
+                                    pharmacyCard.contact ?? "",
                                     18,
                                   ),
                                 ),
@@ -112,8 +110,9 @@ class MedicinePharmacyCard extends StatelessWidget {
                       child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           physics: const BouncingScrollPhysics(),
-                          itemCount: strockMap.length,
+                          itemCount: pharmacyCard.pharmacyCardStrock!.length,
                           itemBuilder: (context, medicineCardIndex) {
+                          
                             return snapshotData == null
                                 ? const Center(
                                     child: CircularProgressIndicator(),
@@ -170,7 +169,7 @@ class MedicinePharmacyCard extends StatelessWidget {
               child: IconButton(
                   onPressed: () {
                     showDialogBox('Location',
-                        "location- ${snapshotData![pharmacyCardIndex]['location']}");
+                        "location- ${snapshotData![pharmacyCardIndex].location}");
                   },
                   icon: const Icon(
                     Bootstrap.pin_map_fill,

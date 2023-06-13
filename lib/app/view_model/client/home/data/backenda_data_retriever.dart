@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:pharma_go_v2_app/app/model/client/medicine_cart_model.dart';
+import 'package:pharma_go_v2_app/app/model/pharmacy_card.dart';
+import 'package:pharma_go_v2_app/app/model/pharmacy_strock_card.dart';
 import 'package:pharma_go_v2_app/app/view/client/components/alert_boxes/get_alert.dart';
 import 'package:pharma_go_v2_app/supports/services/firebase_instance.dart';
 
@@ -12,14 +15,15 @@ class RetrieveHelper {
   final _localStorage = GetStorage();
 
   //retrieve phamacy strock prices using medicine id
-  Future<List<Map<String, dynamic>>> getPriceListWithMedicineID({
-    required List<Map<String, dynamic>> medicineAllData,
+  Future<List<PharmacyCard>> getPriceListWithMedicineID({
+    required List<MedicineCartModel> listOfMedicineCarts,
   }) async {
-    List<Map<String, dynamic>> listOfdataMap = [];
+    List<PharmacyCard> pharmacyCardList = [];
     // create collection refference
     CollectionReference pharmacyRef =
         _backEndSupport.noSQLStorage().collection('pharmacy-collection');
 
+    // Logger().i("inside getPriceListWithMedicineID");
     try {
       //get the snapshot of data
       QuerySnapshot snapshot = await pharmacyRef.get();
@@ -33,36 +37,35 @@ class RetrieveHelper {
         Map<String, dynamic> pharmacyData =
             pharmacyDoc.data() as Map<String, dynamic>;
 
-        // add data to data map
-        pharmacyData.putIfAbsent('pharmacyID', () => pharmacyDoc.id);
-        pharmacyData.putIfAbsent(
-            'phamacyName', () => pharmacyData['name'] ?? '');
-        pharmacyData.putIfAbsent(
-            'location', () => pharmacyData['location'] ?? '');
-        pharmacyData.putIfAbsent(
-            'contact', () => pharmacyData['contact'] ?? '');
-        pharmacyData.putIfAbsent(
-            'registrationID', () => pharmacyData['registrationID'] ?? '');
-
-        // input pharmacy id and check strock data in the pharmacy. and match with medicine list
-        // with the list of the phamacy strock
-
-        //   Logger().i("Pharmacy ID == ${pharmacyDoc.id}");
-        List<Map<String, dynamic>> strockList = await getstrockData(
+        List<PharmacyStrockCard> strockList = await getstrockData(
           pharmacyDocID: pharmacyDoc.id,
-          medicineIDListWiithAllDAta: medicineAllData,
+          medicineCartModels: listOfMedicineCarts,
         );
 
         if (strockList.isNotEmpty) {
           // if the strock is available then add it to pharmacy data
-          pharmacyData.putIfAbsent('strockList', () => strockList);
+          //   pharmacyData.putIfAbsent('strockList', () => strockList);
 
-          // if the strock is available only then add it to the list of the data map
-          listOfdataMap.insert(0, pharmacyData);
+          // Logger().i("Strock list is available --> ${strockList.length} ");
+
+          //create object
+          PharmacyCard pharmacyCard = PharmacyCard.setData(
+            pharmacyDoc.id.toString(),
+            pharmacyData['name'] ?? '',
+            pharmacyData['location'] ?? '',
+            pharmacyData['contact'] ?? '',
+            pharmacyData['registrationID'] ?? '',
+            strockList,
+          );
+
+          // Logger().i(
+          //     "Strok is created -->  pha name --+ ${pharmacyCard.phamacyName}");
+          // // if the strock is available only then add it to the list of the data map
+          pharmacyCardList.add(pharmacyCard);
         }
       }
-      //   Logger().i("length of list of map ---> ${listOfdataMap.length}");
-      return listOfdataMap;
+      // Logger().i("list of pharmacy card object ${pharmacyCardList.length}");
+      return pharmacyCardList;
     } on FirebaseException catch (e) {
       showDialogBox("error", e.code);
       return [];
@@ -70,25 +73,23 @@ class RetrieveHelper {
   }
 
   //retrieve all medicine data frim strock of selected pharmacy
-  Future<List<Map<String, dynamic>>> getstrockData(
-      {required String pharmacyDocID,
-      required List<Map<String, dynamic>> medicineIDListWiithAllDAta}) async {
+  Future<List<PharmacyStrockCard>> getstrockData({
+    required String pharmacyDocID,
+    required List<MedicineCartModel> medicineCartModels,
+  }) async {
     // show parameters are correctly recieved
 
-    List<Map<String, dynamic>> listOfMedicineMap = [];
+    List<PharmacyStrockCard> listOfPharmacyStrockCard = [];
 
     try {
-      for (var medicineID in medicineIDListWiithAllDAta) {
-        //make map to store single data doc
-        Map<String, dynamic> stockDataMap = {};
-        // get the ID of pharmacy collection. and find price
+      for (var medicineCart in medicineCartModels) {
         //from strock collection
         QuerySnapshot<Map<String, dynamic>> queryMap = await _backEndSupport
             .noSQLStorage()
             .collection('pharmacy-collection')
             .doc(pharmacyDocID)
             .collection('pharmacy-strock')
-            .where('medicineID', isEqualTo: medicineID['id']) //ativan
+            .where('medicineID', isEqualTo: medicineCart.id)
             .get();
 
         // check medicine id is available or not
@@ -103,22 +104,36 @@ class RetrieveHelper {
         Map<String, dynamic> stockDoc =
             stockList.first.data() as Map<String, dynamic>;
 
-        stockDataMap.putIfAbsent('price', () => stockDoc['price']);
-        stockDataMap.putIfAbsent('quantity', () => stockDoc['quantity']);
-        stockDataMap.putIfAbsent('name', () => medicineID['name']);
-        stockDataMap.putIfAbsent('frequency', () => medicineID['frequency']);
-        stockDataMap.putIfAbsent('days', () => medicineID['days']);
-        stockDataMap.putIfAbsent(
-            'dosage_in_note', () => medicineID['dosage_in_note']);
-        stockDataMap.putIfAbsent(
-            'dosage_in_medicine', () => medicineID['dosage_in_medicine']);
+        // Logger().i(
+        //     "Strock is catched --> price --${stockDoc['price']} Q -- ${stockDoc['quantity']}");
+        PharmacyStrockCard pharmacyStrockCard = PharmacyStrockCard.setData(
+          medicineCart.name.toString(),
+          medicineCart.frequency.toString(),
+          medicineCart.days.toString(),
+          medicineCart.dosageInNote.toString(),
+          medicineCart.id.toString(),
+          medicineCart.dosageInMedicine.toString(),
+          stockDoc['price'],
+          stockDoc['quantity'],
+        );
+        // stockDataMap.putIfAbsent('price', () => stockDoc['price']);
+        // stockDataMap.putIfAbsent('quantity', () => stockDoc['quantity']);
+        // stockDataMap.putIfAbsent('name', () => medicineCart.name);
+        // stockDataMap.putIfAbsent('frequency', () => medicineCart.frequency);
+        // stockDataMap.putIfAbsent('days', () => medicineCart.days);
+        // stockDataMap.putIfAbsent(
+        //     'dosage_in_note', () => medicineCart.dosageInNote);
+        // stockDataMap.putIfAbsent(
+        //     'dosage_in_medicine', () => medicineCart.dosageInMedicine);
 
-        listOfMedicineMap.insert(0, stockDataMap);
+        //  Logger().i("object is created --${pharmacyStrockCard.name}");
+        listOfPharmacyStrockCard.add(pharmacyStrockCard);
       }
-      return listOfMedicineMap;
+      //   Logger().i("object is created --${listOfPharmacyStrockCard.length}");
+      return listOfPharmacyStrockCard;
     } on FirebaseException catch (e) {
       showDialogBox('error', e.code);
-      return listOfMedicineMap;
+      return listOfPharmacyStrockCard;
     }
   }
 }

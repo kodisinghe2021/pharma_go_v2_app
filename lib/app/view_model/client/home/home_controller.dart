@@ -7,6 +7,9 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
+import 'package:pharma_go_v2_app/app/model/client/extracted_char/extracted_char.dart';
+import 'package:pharma_go_v2_app/app/model/client/medicine_cart_model.dart';
+import 'package:pharma_go_v2_app/app/model/pharmacy_card.dart';
 import 'package:pharma_go_v2_app/app/view/client/components/alert_boxes/get_alert.dart';
 import 'package:pharma_go_v2_app/app/view_model/client/home/data/backenda_data_retriever.dart';
 import 'package:pharma_go_v2_app/supports/providers/client/ocr_provider/ocr_provider.dart';
@@ -53,7 +56,7 @@ class HomeController extends GetxController {
   late DateTime currentDateTime;
 //*---------------------------- refference variables
   File imageFile = File('');
-  List<Map<String, String>> textMapList = [];
+  List<ExtractedCharModel> extractedCharObjectList = [];
 
   FlipCardController flipCardController = FlipCardController();
   //create text recognisor
@@ -68,7 +71,6 @@ class HomeController extends GetxController {
 //& 1---------------------------------
   //---------- pick image from gallery or camera.
   Future<void> setImageFilePath(ImageSource imageSource) async {
-    Logger().i('setImageFilePath(ImageSource imageSource)');
     List<String> scannedText = [];
 
     try {
@@ -96,60 +98,71 @@ class HomeController extends GetxController {
     //read and get text list.
     List<String> textList = await _ocrProvider.getRecognizedText(imageFile);
     Logger().i('length of text list------------  ${textList.length}');
+
     //convert to map
-    textMapList = await _ocrProvider.mapNoteData(textList);
+
+    extractedCharObjectList = await _ocrProvider.mapNoteData(textList);
 
     //if converting succes then visibility on
-    if (textMapList.isNotEmpty) {
+    if (extractedCharObjectList.isNotEmpty) {
       isTextExtracted.value = true;
     }
   }
 
 //& 3---------------------------------
-  Future<List<Map<String, dynamic>>> setData() async {
+  Future<List<PharmacyCard>> getData() async {
     // this id is the id of the medicine. according to the medicine id.
     // if the medicine note is not readed then exit with null list.
-    if (textMapList.isEmpty) {
+    //  Logger().i("Extracted text- ${extractedCharObjectList[0].name}");
+    if (extractedCharObjectList.isEmpty) {
       showDialogBox('Text not identified', 'message');
       return [];
     }
-    //create mepty list for store medicine id's.
-    List<Map<String, dynamic>> medicineAllData = [];
+
+    List<MedicineCartModel> medicineCartModelList = [];
 
     // make medicine id list
-    for (var element in textMapList) {
-      //   Logger().i("element list ${element['name']}");
-
+    for (var charObject in extractedCharObjectList) {
       // if medicine name is null then return.
-      if (element['name'] == null) {
+      // Logger().i("character object name- ${charObject.name}");
+      if (charObject.name == null) {
         return [];
       }
 
       // get the medicine name and find it is available or not
-
       Map<String, dynamic> medicineIdWithDosage =
-          await getMedicine(element['name'] ?? '');
+          await getMedicine(charObject.name ?? '');
 
-      // String medid = medicineIdWithDosage['medId'];
-      // String dosageFromMeidcine = medicineIdWithDosage['dosage_in_medicine'];
+      //  Logger().i("Medicine found -- ${medicineIdWithDosage['medId']}");
 
       if (medicineIdWithDosage['medId'].isNotEmpty) {
-        medicineAllData.insert(0, {
-          'name': element['name'],
-          'frequency': element['frequency'],
-          'days': element['days'],
-          'dosage_in_note': element['dosage_in_note'],
-          'id': medicineIdWithDosage['medId'],
-          'dosage_in_medicine': medicineIdWithDosage['dosage_in_medicine'],
-        });
+        // create and initilize medicine cart object
+        MedicineCartModel medicineCartModel = MedicineCartModel.setData(
+          charObject.name.toString(),
+          charObject.frequency.toString(),
+          charObject.days.toString(),
+          charObject.dosageInNote.toString(),
+          medicineIdWithDosage['medId'],
+          medicineIdWithDosage['dosage_in_medicine'],
+        );
+        //   Logger()
+        //       .i("medicine cart model is created-- ${medicineCartModel.name}");
+        //add single object to the list
+        medicineCartModelList.add(medicineCartModel);
+        // medicineAllData.insert(0, {
+        //   'name': charObject.name,
+        //   'frequency': charObject.frequency,
+        //   'days': charObject.days,
+        //   'dosage_in_note': charObject.dosageInNote,
+        //   'id': medicineIdWithDosage['medId'],
+        //   'dosage_in_medicine': medicineIdWithDosage['dosage_in_medicine'],
+        // });
       }
     }
-
-    // Logger().i("medicine list setted - $medicineIDList");
-
-    List<Map<String, dynamic>> dataList =
+    //  Logger().i("medicineCartModelList created ${medicineCartModelList.length}");
+    List<PharmacyCard> dataList =
         await _retrieveHelper.getPriceListWithMedicineID(
-      medicineAllData: medicineAllData,
+      listOfMedicineCarts: medicineCartModelList,
     );
 
     return dataList;
@@ -159,7 +172,7 @@ class HomeController extends GetxController {
 // make meidcine id list
   Future<Map<String, dynamic>> getMedicine(String medicineName) async {
     //make empty list for store data.
-    Map<String, dynamic> medicineIdName = {};
+    Map<String, dynamic> medicineDataMap = {};
 
     //make refference
     CollectionReference ref =
@@ -174,18 +187,21 @@ class HomeController extends GetxController {
       List<QueryDocumentSnapshot> docList = snapshot.docs;
 
       // get medicine dosage
-      Map<String, dynamic> medicineDat =
+      Map<String, dynamic> medicineData =
           docList.first.data() as Map<String, dynamic>;
-      String dosage = medicineDat['dossage'];
+
+      // put dosage
+      String dosage = medicineData['dossage'];
+
       // doc list have only one value.
       String medicineID = docList.first.id;
-      // Logger().i("medicine id is catched $medicineID");
-      medicineIdName.putIfAbsent('medId', () => medicineID);
-      medicineIdName.putIfAbsent('dosage_in_medicine', () => dosage);
 
-      return medicineIdName;
+      medicineDataMap.putIfAbsent('medId', () => medicineID);
+      medicineDataMap.putIfAbsent('dosage_in_medicine', () => dosage);
+
+      return medicineDataMap;
     } catch (e) {
-      return medicineIdName;
+      return medicineDataMap;
     }
   }
 
@@ -204,5 +220,4 @@ class HomeController extends GetxController {
     };
     return dateTimeMap;
   }
-
 }

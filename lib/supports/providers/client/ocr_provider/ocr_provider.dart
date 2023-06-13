@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:logger/logger.dart';
+import 'package:pharma_go_v2_app/app/model/client/extracted_char/extracted_char.dart';
 import 'package:pharma_go_v2_app/app/view/client/components/alert_boxes/get_alert.dart';
 
 class OCRProvider {
@@ -59,17 +60,23 @@ class OCRProvider {
   }
 
 // map arrays
-  Future<List<Map<String, String>>> mapNoteData(List<String> textList) async {
+  Future<List<ExtractedCharModel>> mapNoteData(List<String> textList) async {
+    
     List<List<String>> subArrays = _dividingAlgo(textList);
-    List<Map<String, String>> mapList = [];
+
+    //List<Map<String, String>> mapList = [];
+    List<ExtractedCharModel> objList = [];
+
     for (var i = 0; i < subArrays.length; i++) {
       Map<String, String> map = {};
       map['name'] = subArrays[i][0];
       map['dosage_in_note'] = subArrays[i][1];
       map['frequency'] = subArrays[i][2];
       map['days'] = subArrays[i][3];
-      mapList.insert(0, map);
+      ExtractedCharModel charModel = ExtractedCharModel.fromJson(map);
+      objList.add(charModel);
+      //mapList.insert(0, map);
     }
-    return mapList;
+    return objList;
   }
 }

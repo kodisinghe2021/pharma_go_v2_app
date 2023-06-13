@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:logger/logger.dart';
+import 'package:pharma_go_v2_app/app/model/pharmacy_card.dart';
+import 'package:pharma_go_v2_app/app/model/pharmacy_strock_card.dart';
 import 'package:pharma_go_v2_app/supports/constant/fonts.dart';
 
 class MedicineCard extends StatelessWidget {
@@ -16,7 +17,7 @@ class MedicineCard extends StatelessWidget {
   final MedicineCardController _controller =
       Get.put<MedicineCardController>(MedicineCardController());
 
-  final List<Map<String, dynamic>> snapshotData;
+  final List<PharmacyCard> snapshotData;
   final int pharmacyCardIndex;
   final int medicineCardIndex;
 
@@ -27,10 +28,11 @@ class MedicineCard extends StatelessWidget {
     // get Screen size.
     final Size screenSize = MediaQuery.of(context).size;
 
-    //get Single map with medicine
-    Map<String, dynamic> singleMap =
-        snapshotData[pharmacyCardIndex]['strockList'][medicineCardIndex];
+    // get Single map with medicine
+    PharmacyStrockCard? medicineCard =
+        snapshotData[pharmacyCardIndex].pharmacyCardStrock![medicineCardIndex];
 
+    // PharmacyStrockCard strockCard = pharmacyStrockCardList[pharmacyCardIndex];
     return Container(
       padding: const EdgeInsets.all(5),
       margin: const EdgeInsets.fromLTRB(0, 5, 5, 5),
@@ -55,7 +57,8 @@ class MedicineCard extends StatelessWidget {
             child: Container(
               alignment: Alignment.center,
               child: priceCardFont(
-                singleMap['name'],
+                medicineCard.name ?? "Unknown",
+                // strockCard.name ?? "",
                 20,
               ),
             ),
@@ -65,7 +68,7 @@ class MedicineCard extends StatelessWidget {
             child: Container(
               alignment: Alignment.centerLeft,
               child: priceCardFont(
-                "Take ${singleMap['dosage_in_note']} pill ${_controller.getIntValue(singleMap['frequency'])} times a day ",
+                "Take ${medicineCard.dosageInNote ?? ""} pill ${_controller.getIntValue(medicineCard.frequency ?? "")} times a day ",
                 13,
               ),
             ),
@@ -75,7 +78,7 @@ class MedicineCard extends StatelessWidget {
             child: Container(
               alignment: Alignment.centerLeft,
               child: priceCardFont(
-                "This tablet only for ${_controller.getIntValue(singleMap['days'])} days",
+                "This tablet only for ${_controller.getIntValue(medicineCard.days ?? "")} days",
                 13,
               ),
             ),
@@ -85,7 +88,7 @@ class MedicineCard extends StatelessWidget {
             child: Container(
               alignment: Alignment.centerLeft,
               child: priceCardFont(
-                "Unit price- ${singleMap['price']} /=",
+                "Unit price- ${medicineCard.price ?? ""} /=",
                 15,
               ),
             ),
@@ -96,11 +99,11 @@ class MedicineCard extends StatelessWidget {
               alignment: Alignment.centerLeft,
               child: priceCardFont(
                 "total price- ${_controller.getMedicinePrice(
-                  days: singleMap['days'],
-                  freq: singleMap['frequency'],
-                  recomendedDosage: singleMap['dosage_in_note'],
-                  price: singleMap['price'],
-                  dosageOfMedicine: singleMap['dosage_in_medicine'],
+                  days: medicineCard.days ?? "",
+                  freq: medicineCard.frequency ?? "",
+                  recomendedDosage: medicineCard.dosageInNote ?? "",
+                  price: medicineCard.price ?? "",
+                  dosageOfMedicine: medicineCard.dosageInMedicine ?? "",
                 )} /=",
                 15,
               ),
@@ -110,19 +113,24 @@ class MedicineCard extends StatelessWidget {
             flex: 1,
             child: Obx(
               () => Container(
-                alignment: Alignment.center,
+                alignment: Alignment.bottomRight,
                 child: IconButton(
                   onPressed: () async {
-                    await onCartTap(singleMap);
+                    await onCartTap({});
                   },
-                  icon: _isSelected.value
+                  icon: !_isSelected.value
                       ? const Icon(
-                          Bootstrap.cart_dash,
+                          Bootstrap.cart3,
                           color: Color(0xFFFDE2A0),
                         )
-                      : const Icon(
-                          Bootstrap.cart_plus,
-                          color: Color(0xFFFDE2F3),
+                      : IconButton(
+                          onPressed: () async {
+                            await onCartTap({});
+                          }, //remove from cart
+                          icon: const Icon(
+                            Bootstrap.dash_circle,
+                            color: Color(0xFFFDE2F3),
+                          ),
                         ),
                 ),
               ),
@@ -138,46 +146,33 @@ class MedicineCard extends StatelessWidget {
     _isSelected.value = !_isSelected.value;
 
     // --- create medicine item object.
-    PharmacyCart pharmacyCart =
-        PharmacyCart(pharmacyID: snapshotData[pharmacyCardIndex]['pharmacyID']);
+    // PharmacyCart pharmacyCart = PharmacyCart(
+    //     pharmacyID: snapshotData[pharmacyCardIndex].pharmacyID ?? "");
 
     //set object to controller
-    _controller.setPharmacyCart(pharmacyCart);
+    // _controller.setPharmacyCart(pharmacyCart);
 
-    
+    // double price = _controller.getMedicinePrice(
+    //   days: dataMap['days'],
+    //   freq: dataMap['frequency'],
+    //   recomendedDosage: dataMap['dosage_in_note'],
+    //   price: dataMap['price'],
+    //   dosageOfMedicine: dataMap['dosage_in_medicine'],
+    // );
 
-    double price = _controller.getMedicinePrice(
-      days: dataMap['days'],
-      freq: dataMap['frequency'],
-      recomendedDosage: dataMap['dosage_in_note'],
-      price: dataMap['price'],
-      dosageOfMedicine: dataMap['dosage_in_medicine'],
-    );
+    // MedicineCartItem medicineCartItem = MedicineCartItem(
+    //   medicineName: dataMap['name'] ?? 'null value',
+    //   totalPrice: price.toString(),
+    //   days: dataMap['days'] ?? 'null value',
+    //   requstedDosage: dataMap['dosage_in_note'] ?? 'null value',
+    //   quantityOfMedicine: dataMap['quantity'] ?? 'null value',
+    // );
 
-    MedicineCartItem medicineCartItem = MedicineCartItem(
-      medicineName: dataMap['name'] ?? 'null value',
-      totalPrice: price.toString(),
-      days: dataMap['days'] ?? 'null value',
-      requstedDosage: dataMap['dosage_in_note'] ?? 'null value',
-      quantityOfMedicine: dataMap['quantity'] ?? 'null value',
-    );
+    // Logger().i("MedicineCartItem ${medicineCartItem.medicineName}");
 
-    Logger().i("MedicineCartItem ${medicineCartItem.medicineName}");
+    // Logger().i("MedicineCartItem ${pharmacyCart.pharmacyID}");
 
-    Logger().i("MedicineCartItem ${pharmacyCart.pharmacyID}");
-
-    // add medicine cart item to the pharmacy object
-    pharmacyCart.setItem(medicineCartItem);
-    // Map<String, dynamic> mappp = {
-    //   'pharmacyName': dataMap['pharmacyID'],
-    // };
-
-    // Logger().i("object created ---  ${mappp.length}");
-
-    // List<MedicineCartItem> c = _controller.getMedicineCart();
-    // Logger().d("obj -- ${c[0].medicineName}");
-    // //--- add medicine to the object
-    // _pharmacyCart.setItem();
+    // pharmacyCart.setItem(medicineCartItem);
   }
 }
 
@@ -217,67 +212,44 @@ class MedicineCardController extends GetxController {
     itemCount += 1;
   }
 
-  late PharmacyCart _pharmacyCart;
+  // late PharmacyCart _pharmacyCart;
 
-  void setPharmacyCart(PharmacyCart pharmacyCartfrom) {
-    _pharmacyCart = pharmacyCartfrom;
-  }
+  // void setPharmacyCart(PharmacyCart pharmacyCartfrom) {
+  //   _pharmacyCart = pharmacyCartfrom;
+  // }
 
-  PharmacyCart get getPharmacyCart => _pharmacyCart;
+  // PharmacyCart get getPharmacyCart => _pharmacyCart;
+}
 
-//   final List<MedicineCartItem> _cartList = [];
-//   late MedicineCartItem _cartItem;
-// // ----- det obj
-//   Future<void> setMedicineToCart({
-//     required medicineName,
-//     required totalPrice,
-//     required days,
-//     required requstedDosage,
-//     required quantityOfMedicine,
-//   }) async {
-//     _cartItem = MedicineCartItem(
-//       medicineName: medicineName,
-//       totalPrice: totalPrice,
-//       days: days,
-//       requstedDosage: requstedDosage,
-//       quantityOfMedicine: quantityOfMedicine,
-//     );
-//     _cartList.add(_cartItem);
+// //model
+// //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// class MedicineCartItem {
+//   String medicineName;
+//   String totalPrice;
+//   String days;
+//   String requstedDosage;
+//   String quantityOfMedicine;
+
+//   MedicineCartItem({
+//     required this.medicineName,
+//     required this.totalPrice,
+//     required this.days,
+//     required this.requstedDosage,
+//     required this.quantityOfMedicine,
+//   });
+// }
+
+// class PharmacyCart {
+//   String pharmacyID;
+//   final List<MedicineCartItem> _itemList = [];
+
+//   PharmacyCart({
+//     required this.pharmacyID,
+//   });
+
+//   void setItem(MedicineCartItem item) {
+//     _itemList.add(item);
 //   }
 
-// //---- get obj
-//   List<MedicineCartItem> getMedicineCart() => _cartList;
-}
-
-//model
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-class MedicineCartItem {
-  String medicineName;
-  String totalPrice;
-  String days;
-  String requstedDosage;
-  String quantityOfMedicine;
-
-  MedicineCartItem({
-    required this.medicineName,
-    required this.totalPrice,
-    required this.days,
-    required this.requstedDosage,
-    required this.quantityOfMedicine,
-  });
-}
-
-class PharmacyCart {
-  String pharmacyID;
-  final List<MedicineCartItem> _itemList = [];
-
-  PharmacyCart({
-    required this.pharmacyID,
-  });
-
-  void setItem(MedicineCartItem item) {
-    _itemList.add(item);
-  }
-
-  List<MedicineCartItem> get getItemList => _itemList;
-}
+//   List<MedicineCartItem> get getItemList => _itemList;
+// }
