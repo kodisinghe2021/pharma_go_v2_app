@@ -27,20 +27,23 @@ FittedBox cardText(
       ),
     );
 
+Text priceCardFont(String text, double fontSize) => Text(
+      text,
+      style: GoogleFonts.roboto(
+          color: const Color.fromARGB(255, 252, 252, 252), fontSize: fontSize),
+    );
 
-    Text priceCardFont(String text, double fontSize) => Text(
-        text,
-        style: GoogleFonts.roboto(
-            color: const Color.fromARGB(255, 252, 252, 252),
-            fontSize: fontSize),
-      );
+Text thisPageFonts(String text, double fontSize) => Text(
+      text,
+      style: GoogleFonts.roboto(
+        color: const Color.fromARGB(255, 25, 7, 97),
+        fontSize: fontSize,
+        fontWeight: FontWeight.normal,
+      ),
+    );
 
-
-  Text thisPageFonts(String text, double fontSize) => Text(
-        text,
-        style: GoogleFonts.roboto(
-          color: const Color.fromARGB(255, 25, 7, 97),
-          fontSize: fontSize,
-          fontWeight: FontWeight.normal,
-        ),
-      );
+TextStyle cardFontDark(double fontSize) => GoogleFonts.roboto(
+      fontSize: fontSize,
+      color: const Color(0xFF0E2954),
+      fontWeight: FontWeight.bold,
+    );

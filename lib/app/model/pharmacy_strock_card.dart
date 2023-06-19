@@ -1,5 +1,4 @@
-
-class PharmacyStrockCard {
+class MedicineCardModel {
   String? name;
   String? frequency;
   String? days;
@@ -9,16 +8,7 @@ class PharmacyStrockCard {
   String? price;
   String? quantity;
 
-  // PharmacyStrockCard.fromJson(Map<String, dynamic> dataMap) {
-  //   name = dataMap['name'];
-  //   frequency = dataMap['frequency'];
-  //   days = dataMap['days'];
-  //   dosageInMedicine = dataMap['dosage_in_note'];
-  //   id = dataMap['id'];
-  //   dosageInMedicine = dataMap['dosage_in_medicine'];
-  // }
-
-  PharmacyStrockCard.setData(
+  MedicineCardModel.setData(
     String this.name,
     String this.frequency,
     String this.days,

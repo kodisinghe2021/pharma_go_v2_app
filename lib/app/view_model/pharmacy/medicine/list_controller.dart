@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:logger/logger.dart';
-import 'package:pharma_go_v2_app/supports/services/firebase_instance.dart';
+import 'package:pharma_go_v2_app/supports/services/firebase/firebase_instance.dart';
 
 class PharmaMedListController extends GetxController {
   //*----------------------instanse

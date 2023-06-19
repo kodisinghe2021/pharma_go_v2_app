@@ -6,7 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:pharma_go_v2_app/app/model/pharmacy/phama_model.dart';
 import 'package:pharma_go_v2_app/app/view/client/components/alert_boxes/get_alert.dart';
 import 'package:pharma_go_v2_app/supports/routes/app_pages.dart';
-import 'package:pharma_go_v2_app/supports/services/firebase_instance.dart';
+import 'package:pharma_go_v2_app/supports/services/firebase/firebase_instance.dart';
 
 class PharmaLoginController extends GetxController {
 //*----------------------instanse

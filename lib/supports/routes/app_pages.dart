@@ -2,17 +2,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:pharma_go_v2_app/app/view/client/pages/auth/login_page.dart';
 import 'package:pharma_go_v2_app/app/view/client/pages/auth/registration_page.dart';
+import 'package:pharma_go_v2_app/app/view/client/pages/cart/controller/cart_binding.dart';
+import 'package:pharma_go_v2_app/app/view/client/pages/cart/page/cart.dart';
 import 'package:pharma_go_v2_app/app/view/client/pages/nav_bar/main_nav_bar.dart';
+import 'package:pharma_go_v2_app/app/view/client/pages/orders/page/orders.dart';
+import 'package:pharma_go_v2_app/app/view/client/pages/payment/controller/pay_controller.dart';
+import 'package:pharma_go_v2_app/app/view/client/pages/payment/page/pay_page.dart';
+import 'package:pharma_go_v2_app/app/view/client/pages/pharmacy_list/pharmacy_list.dart';
 import 'package:pharma_go_v2_app/app/view/common/splash/splash_screen.dart';
 import 'package:pharma_go_v2_app/app/view/pharmacy/auth/pharma_login.dart';
 import 'package:pharma_go_v2_app/app/view/pharmacy/auth/pharma_registration.dart';
 import 'package:pharma_go_v2_app/app/view/pharmacy/nav_bar/pharama_nav_bar.dart';
 import 'package:pharma_go_v2_app/app/view_model/client/auth/login_binding.dart';
 import 'package:pharma_go_v2_app/app/view_model/client/auth/registration_binding.dart';
-import 'package:pharma_go_v2_app/app/view_model/client/main/main_navbar_binding.dart';
+import 'package:pharma_go_v2_app/app/view_model/client/main_nav/main_navbar_binding.dart';
+import 'package:pharma_go_v2_app/app/view_model/client/pharmacy_list/pharmacy_list_binder.dart';
 import 'package:pharma_go_v2_app/app/view_model/common/splash/splash_binding.dart';
 import 'package:pharma_go_v2_app/app/view_model/pharmacy/auth/login/pharma_login_binding.dart';
 import 'package:pharma_go_v2_app/app/view_model/pharmacy/auth/registration/pharma_registration_binding.dart';
+import 'package:pharma_go_v2_app/app/view_model/pharmacy/orders/orders_binding.dart';
 import 'package:pharma_go_v2_app/app/view_model/pharmacy/pharma-nav-controller/pharama_nav_binding.dart';
 
 part 'routes.dart';
@@ -51,7 +59,7 @@ class AppPages {
     //client side main navbar
     GetPage(
       name: Paths.CLIENTMAINNAVBAR,
-      page: () => const ClientMainNavBar(),
+      page: () => ClientMainNavBar(),
       binding: ClientMainNavBarBinding(),
     ),
 
@@ -74,6 +82,31 @@ class AppPages {
       name: Paths.PHARMANAVBAR,
       page: () => PharamaNavBar(),
       binding: PharamaNavBarBinding(),
+    ),
+
+    //pharmacy list
+    GetPage(
+      name: Paths.PHARMACYLIST,
+      page: () => PharmacyListPage(),
+      binding: PharmacyListBingder(),
+    ),
+
+    GetPage(
+      name: Paths.ORDERSPAGE,
+      page: () => const OrdersPage(),
+      binding: OrderBinding(),
+    ),
+
+    GetPage(
+      name: Paths.CARTPAGE,
+      page: () => CartPage(),
+      binding: CartBinding(),
+    ),
+
+    GetPage(
+      name: Paths.PAYPAGE,
+      page: () => const PayPage(),
+      binding: PayBinding(),
     ),
   ];
 }

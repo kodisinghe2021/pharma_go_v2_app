@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pharma_go_v2_app/app/view/client/pages/home/widgets/top_bar.dart';
-import 'package:pharma_go_v2_app/app/view_model/client/home/home_controller.dart';
+import 'package:pharma_go_v2_app/app/view_model/client/tabbar_tabs/home/controller/home_controller.dart';
 
 class HomeBottomNavBar extends StatelessWidget {
   HomeBottomNavBar({

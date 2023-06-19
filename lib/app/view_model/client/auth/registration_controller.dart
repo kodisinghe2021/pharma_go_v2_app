@@ -11,7 +11,7 @@ import 'package:pharma_go_v2_app/app/model/client/user/model_to_map.dart';
 import 'package:pharma_go_v2_app/app/model/client/user/user_model.dart';
 import 'package:pharma_go_v2_app/app/view/client/components/alert_boxes/get_alert.dart';
 import 'package:pharma_go_v2_app/supports/routes/app_pages.dart';
-import 'package:pharma_go_v2_app/supports/services/firebase_instance.dart';
+import 'package:pharma_go_v2_app/supports/services/firebase/firebase_instance.dart';
 
 class ClientRegistrationController extends GetxController {
 //*----------------------instanse
