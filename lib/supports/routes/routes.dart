@@ -17,6 +17,16 @@ abstract class Routes {
 
   // static const MAPPAGE = Paths.MAPPAGE;
   // static const ORDERDATAILS = Paths.ORDERDATAILS;
+
+  //pharmacy list
+  static const PHARMACYLIST = Paths.PHARMACYLIST;
+
+  static const ORDERSPAGE = Paths.ORDERSPAGE;
+
+  static const CARTPAGE = Paths.CARTPAGE;
+
+  static const PAYPAGE = Paths.PAYPAGE;
+
 }
 
 abstract class Paths {
@@ -35,4 +45,11 @@ abstract class Paths {
   static const PHARMANAVBAR = '/nav-pharama';
   // static const MAPPAGE = '/map-page';
   // static const ORDERDATAILS = '/orderdetails';
+
+  //pharmacy list
+  static const PHARMACYLIST = '/pharmacy-list';
+  static const ORDERSPAGE = '/orders-page';
+  static const CARTPAGE = '/cart-page';
+  static const PAYPAGE = '/pay-page';
+
 }
