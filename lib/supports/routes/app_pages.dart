@@ -4,6 +4,7 @@ import 'package:pharma_go_v2_app/app/view/client/pages/auth/login_page.dart';
 import 'package:pharma_go_v2_app/app/view/client/pages/auth/registration_page.dart';
 import 'package:pharma_go_v2_app/app/view/client/pages/cart/controller/cart_binding.dart';
 import 'package:pharma_go_v2_app/app/view/client/pages/cart/page/cart.dart';
+import 'package:pharma_go_v2_app/app/view/client/pages/medicine_list/pages/medicine_details.dart';
 import 'package:pharma_go_v2_app/app/view/client/pages/nav_bar/main_nav_bar.dart';
 import 'package:pharma_go_v2_app/app/view/client/pages/orders/page/orders.dart';
 import 'package:pharma_go_v2_app/app/view/client/pages/payment/controller/pay_controller.dart';
@@ -93,7 +94,7 @@ class AppPages {
 
     GetPage(
       name: Paths.ORDERSPAGE,
-      page: () => const OrdersPage(),
+      page: () => OrdersPage(),
       binding: OrderBinding(),
     ),
 
@@ -107,6 +108,11 @@ class AppPages {
       name: Paths.PAYPAGE,
       page: () => const PayPage(),
       binding: PayBinding(),
+    ),
+    GetPage(
+      name: Paths.MDETAILS,
+      page: () => MedicineDetails(),
+      binding: MedicineDetailsBinding(),
     ),
   ];
 }

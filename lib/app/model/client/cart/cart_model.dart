@@ -10,6 +10,7 @@ class CartModel {
   String? pharmacyName;
   String? date;
   String? time;
+  String? status;
 
   CartModel.setData(
     this.medicineName,
@@ -23,8 +24,8 @@ class CartModel {
     this.pharmacyName,
     this.date,
     this.time,
+    this.status,
   );
-
 
   CartModel.fromJson({required Map<String, dynamic> json}) {
     medicineID = json['medicineID'];
@@ -38,6 +39,7 @@ class CartModel {
     pharmacyName = json['pharmacyName'];
     date = json['date'];
     time = json['time'];
+    status = json['status'];
   }
 
   Map<String, dynamic> toJson(String docID) {
@@ -51,9 +53,11 @@ class CartModel {
     data['frequncy'] = frequncy;
     data['price'] = price;
     data['pharmacyID'] = pharmacyID;
-    data['pharmacyName'] = medicineName;
+    data['pharmacyName'] = pharmacyName;
     data['date'] = date;
     data['time'] = time;
+    data['status'] = status;
+    
     return data;
   }
 }

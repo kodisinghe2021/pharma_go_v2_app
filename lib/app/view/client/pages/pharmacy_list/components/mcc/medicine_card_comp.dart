@@ -95,7 +95,10 @@ class MedicineCardComp extends StatelessWidget {
                 pharmacyCardModel.phamacyName,
                 "${getCurrentDate()['date']}/${getCurrentDate()['month']}/${getCurrentDate()['year']}",
                 "${getCurrentDate()['hour']}:${getCurrentDate()['minut']}:${getCurrentDate()['second']}",
+                'pending',
               );
+
+              
               Logger().i("medicine name -- ${medicineCardModel.name}");
 
               // add object to controller

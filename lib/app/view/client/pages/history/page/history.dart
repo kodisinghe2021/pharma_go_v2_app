@@ -1,10 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pharma_go_v2_app/app/model/client/cart/cart_model.dart';
 import 'package:pharma_go_v2_app/app/view/client/pages/history/controller/history_controller.dart';
-import 'package:pharma_go_v2_app/app/view/client/pages/history/widgets/history_card.dart';
-import 'package:pharma_go_v2_app/supports/constant/box_constraints.dart';
 
 class HistoryPage extends GetView<HistoryController> {
   HistoryPage({super.key});
@@ -13,53 +9,48 @@ class HistoryPage extends GetView<HistoryController> {
       Get.put<HistoryController>(HistoryController());
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
-    return Scaffold(
-      body: Stack(
-        children: [
-          SizedBox(
-            width: screenSize.width,
-            height: double.infinity,
-            child: Image.asset(
-              'assets/images/history.jpg',
-              fit: BoxFit.cover,
-            ),
-          ),
-          Positioned(
-            top: 40,
-            child: SizedBox(
-              width: getscreenSize(context).width,
-              height: getscreenSize(context).height * 8,
-              child: StreamBuilder<QuerySnapshot<Object?>>(
-                stream: _controller.getOrderData(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasError) {
-                    return const Text('Something went wrong');
-                  }
+    return const Scaffold(
+        // body: Stack(
+        //   children: [
+        //     SizedBox(
+        //       width: getscreenSize(context).width,
+        //       height: double.infinity,
+        //       child: Image.asset(
+        //         'assets/images/history.jpg',
+        //         fit: BoxFit.cover,
+        //       ),
+        //     ),
+        //     Padding(
+        //       padding: const EdgeInsets.only(top: 50),
+        //       child: FutureBuilder<
+        //           List<QueryDocumentSnapshot<Map<String, dynamic>>>>(
+        //         future: _controller.getOrderData(),
+        //         builder: (context, snapshot) {
+        //           if (snapshot.data!.isEmpty) {
+        //             const Center(
+        //               child: Text("No data"),
+        //             );
+        //           }
 
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Text("Loading");
-                  }
+        //           if (snapshot.data!.isNotEmpty) {
+        //             return ListView.builder(
+        //               itemCount: snapshot.data!.length,
+        //               itemBuilder: (context, index) => OrderCard(
+        //                 cartModel: CartModel.fromJson(
+        //                   json: snapshot.data![index].data(),
+        //                 ),
+        //               ),
+        //             );
+        //           }
 
-                  return ListView(
-                    children:
-                        snapshot.data!.docs.map((DocumentSnapshot document) {
-                      CartModel model = CartModel.fromJson(
-                          json: document.data()! as Map<String, dynamic>);
-
-                      return HistoryCard(
-                        cartModel: model,
-                        statusCode: 0,
-                      );
-                    }).toList(),
-                  );
-                },
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+        //           return const Center(
+        //             child: Text("No data"),
+        //           );
+        //         },
+        //       ),
+        //     ),
+        //   ],
+        // ),
+        );
   }
 }
