@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
-import 'package:pharma_go_v2_app/app/view_model/client/tabbar_tabs/medicine/medicine_controller.dart';
+import 'package:pharma_go_v2_app/app/view/client/pages/medicine_list/controllers/medicine_controller.dart';
+
+
 
 class MedicineBinding extends Bindings {
   @override

@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:logger/logger.dart';
+import 'package:pharma_go_v2_app/app/model/client/cart/cart_model.dart';
+import 'package:pharma_go_v2_app/supports/routes/app_pages.dart';
 import 'package:pharma_go_v2_app/supports/services/firebase/firebase_instance.dart';
 
 class HistoryController extends GetxController {
@@ -15,6 +17,7 @@ class HistoryController extends GetxController {
     super.onInit();
   }
 
+  var pageLoad = false.obs;
   //--- backend support
   final FirebaseFirestore _backEndSupport = BackEndSupport().noSQLStorage();
 
@@ -34,21 +37,20 @@ class HistoryController extends GetxController {
   //   itemAdding.value = true;
   // }
 
-  Stream<QuerySnapshot> getOrderData() {
-    return _backEndSupport
+  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>>
+      getOrderData() async {
+    pageLoad.value = true;
+    Logger().i("user id -- $userID");
+    QuerySnapshot<Map<String, dynamic>> qMap = await _backEndSupport
         .collection('user-collection')
         .doc(userID)
         .collection('order-collection')
-        .snapshots();
+        .get();
+
+    return qMap.docs;
   }
 
-  // Future<int> delete() async {
-  //   int deletedID = -1;
-  //   for (var i = 0; i < 1; i++) {
-  //     deletedID = await SqlHelper.deleteData(42);
-  //   }
-  //   itemAdding.value = false;
-  //   return deletedID;
-  // }
-
+  void moveToPay(CartModel model) {
+    Get.toNamed(Routes.PAYPAGE, arguments: model);
+  }
 }

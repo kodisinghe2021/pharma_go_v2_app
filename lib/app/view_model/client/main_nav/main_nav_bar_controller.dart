@@ -4,7 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:logger/logger.dart';
 import 'package:pharma_go_v2_app/app/view/client/pages/history/page/history.dart';
 import 'package:pharma_go_v2_app/app/view/client/pages/home/pages/home_page.dart';
-import 'package:pharma_go_v2_app/app/view/client/pages/medicine_list/medicine.dart';
+import 'package:pharma_go_v2_app/app/view/client/pages/medicine_list/pages/medicine.dart';
 import 'package:pharma_go_v2_app/app/view/client/pages/orders/page/orders.dart';
 import 'package:pharma_go_v2_app/supports/routes/app_pages.dart';
 import 'package:pharma_go_v2_app/supports/services/firebase/firebase_instance.dart';
@@ -40,8 +40,8 @@ class MainNavBarController extends GetxController
   List<Widget> tabPages = [
     HomePage(),
     HistoryPage(),
-    const OrdersPage(),
-    const MedicinePage(),
+    OrdersPage(),
+    MedicinePage(),
   ];
 
   Future<void> logout() async {

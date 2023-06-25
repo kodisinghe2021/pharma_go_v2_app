@@ -26,6 +26,7 @@ abstract class Routes {
   static const CARTPAGE = Paths.CARTPAGE;
 
   static const PAYPAGE = Paths.PAYPAGE;
+  static const MDETAILS = Paths.MDETAILS;
 
 }
 
@@ -51,5 +52,6 @@ abstract class Paths {
   static const ORDERSPAGE = '/orders-page';
   static const CARTPAGE = '/cart-page';
   static const PAYPAGE = '/pay-page';
+  static const MDETAILS = '/mdetails-page';
 
 }

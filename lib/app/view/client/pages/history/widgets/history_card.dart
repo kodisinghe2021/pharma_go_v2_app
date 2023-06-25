@@ -3,17 +3,39 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:pharma_go_v2_app/app/model/client/cart/cart_model.dart';
+import 'package:pharma_go_v2_app/app/view/client/pages/history/controller/history_controller.dart';
 import 'package:pharma_go_v2_app/supports/constant/box_constraints.dart';
 import 'package:pharma_go_v2_app/supports/routes/app_pages.dart';
 
-class HistoryCard extends StatelessWidget {
-  HistoryCard({
+class OrderCard extends GetView<HistoryController> {
+  OrderCard({
     required this.cartModel,
-    required this.statusCode,
     super.key,
   });
   final CartModel cartModel;
-  final int statusCode;
+
+  int getStatusCode() {
+    int code = -1;
+
+    switch (cartModel.status) {
+      case 'pending':
+        code = 1;
+        break;
+      case 'accepted':
+        code = 2;
+        break;
+      case 'wrapping':
+        code = 3;
+        break;
+      case 'delevered':
+        code = 4;
+        break;
+      default:
+        -1;
+    }
+
+    return code;
+  }
 
   final List<String> statusList = [
     'Pending',
@@ -34,6 +56,7 @@ class HistoryCard extends StatelessWidget {
       width: double.infinity,
       height: getscreenSize(context).height * .15,
       decoration: const BoxDecoration(
+        color: Colors.amber,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
           bottomRight: Radius.circular(30),
@@ -65,6 +88,10 @@ class HistoryCard extends StatelessWidget {
                     "price - Rs.${cartModel.price}.00",
                     style: historyCardFont(size: 14, weight: FontWeight.w900),
                   ),
+                  Text(
+                    "${cartModel.status}",
+                    style: historyCardFont(size: 10, weight: FontWeight.w900),
+                  ),
                 ],
               ),
             ),
@@ -78,11 +105,11 @@ class HistoryCard extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                   decoration: BoxDecoration(
-                    color: statusColor[statusCode], //Colors.white,
+                    color: statusColor[getStatusCode()], //Colors.white,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
-                    statusList[statusCode],
+                    cartModel.status ?? "",
                     style: GoogleFonts.aBeeZee(
                       fontSize: 15,
                       color: Colors.white,
@@ -90,7 +117,8 @@ class HistoryCard extends StatelessWidget {
                   ),
                 ),
                 InkWell(
-                  onTap: () => Get.toNamed(Routes.PAYPAGE),
+                  onTap: () =>
+                      Get.toNamed(Routes.PAYPAGE, arguments: cartModel),
                   child: Container(
                     padding: const EdgeInsets.all(5),
                     decoration: BoxDecoration(
